@@ -2,16 +2,16 @@ ui-layout
   ui-layout-container
     ui-layout(options="{flow : 'column'}")
       ui-layout-container.dashboard-panel
-        h1 Процессинг карт
+        div(ui-view="cards")
       ui-layout-container.dashboard-panel
-        h1 Пассажирооборот
+        div(ui-view="turnover")
   ui-layout-container
     ui-layout(options="{flow : 'column'}")
       ui-layout-container.dashboard-panel(style="width: 45%")
         ui-layout(options="{flow : 'column'}")
           ui-layout-container.dashboard-panel
-            h1 События
+            div(ui-view="events")
           ui-layout-container.dashboard-panel
-            h2 Транзакции
+            div(ui-view="transactions")
       ui-layout-container.dashboard-panel
-          h1 Пассажиропоток
+        div(ui-view="flow")
