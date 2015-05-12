@@ -1,4 +1,14 @@
 h1 Процессинг карт
-ul
-  li(ng-repeat="card in cards") {{ card }}
-
+table.table.table-bordered.table-hover.table-condensed(style="background: white")
+  thead
+    tr.info
+      td Статус
+      td Идентификатор
+      td Баланс
+  tbody
+    tr(ng-repeat='card in cards', ng-class="{'danger': card.balance < 0}")
+      td
+        span.fa.fa-check(style="color: green", ng-if="card.isActive")
+        span.fa.fa-close(style="color: red", ng-if="!card.isActive")
+      td {{ card.id }}
+      td {{ card.balance }}
