@@ -40,13 +40,13 @@ mod.controller('CardsCtrl', function ($scope) {
 
 });
 
-//mod.filter('cardBalance', function () {
-//  return function (card) {
-//    var balance = card.balance ? card.balance : 0;
-//    var s = "" + balance;
-//    if (card.units) {
-//      s += " " + units;
-//    }
-//    return s;
-//  };
-//});
+mod.filter('cardBalanceFilter', function () {
+  return function (card) {
+    var balance = card.balance ? card.balance : 0;
+    var s = "" + balance;
+    if (card.units) {
+      s += " " + card.units;
+    }
+    return s;
+  };
+});

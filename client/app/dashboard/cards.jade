@@ -4,11 +4,11 @@ table.table.table-bordered.table-hover.table-condensed(style="background: white"
     tr.info
       td Статус
       td Идентификатор
-      td Баланс
+      td(style="text-align: right") Баланс
   tbody
     tr(ng-repeat='card in cards', ng-class="{'danger': card.balance < 0}")
       td
         span.fa.fa-check(style="color: green", ng-if="card.isActive")
         span.fa.fa-close(style="color: red", ng-if="!card.isActive")
       td {{ card.id }}
-      td {{ card.balance }}
+      td(style="text-align: right") {{ card | cardBalanceFilter }}
