@@ -26,7 +26,8 @@ mod.controller('CardsCtrl', function ($scope) {
 
   var curID = 80247834;
   var curBalance = 7;
-  for (var i = 0; i < 20; i++) {
+  // TODO make table scrollable
+  for (var i = 0; i < 4; i++) {
     var newCard = {
       id: '' + curID,
       balance: curBalance,
