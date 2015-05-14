@@ -83,9 +83,9 @@ mod.controller('FlowCtrl', function ($scope, $timeout, $log) {
   drawChart();
 
   // WARKAROUND issue with chart width
-  $timeout(function() {
-    $('#flow-chart').highcharts().reflow();
-  }, 100);
+  //$timeout(function() {
+  //  $('#flow-chart').highcharts().reflow();
+  //}, 100);
 
   // Simulate passengers
   var passengerCount = 0;

@@ -85,9 +85,9 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log) {
   drawChart();
 
   // WARKAROUND issue with chart width
-  $timeout(function() {
-    $('#chart').highcharts().reflow();
-  }, 100);
+  //$timeout(function() {
+  //  $('#chart').highcharts().reflow();
+  //}, 100);
 
   // Simulate passengers
   var passengerCount = 0;
