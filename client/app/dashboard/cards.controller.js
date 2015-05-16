@@ -6,47 +6,34 @@ mod.controller('CardsCtrl', function ($scope) {
   $scope.cards = [
     {
       id: "80365814",
-      balance: 84,
-      units: 'руб',
-      isActive: true
+      bags: [
+        {
+          name: "баллы",
+          balance: 100,
+          activePeriod: "бессрочно"
+        },
+        {
+          name: "разовые поездки",
+          balance: 5,
+          activePeriod: "10.05.2015-10.06.2015"
+        },
+        {
+          name: "разовые поездки",
+          balance: 5,
+          activePeriod: "до 15.08.2015"
+        },
+      ]
     },
     {
-      id: "80351196",
-      balance: 149,
-      units: 'руб',
-      isActive: true
+      id: "80365815",
+      bags: [
+        {
+          name: "разовые поездки",
+          balance: 10,
+          activePeriod: "бессрочно"
+        }
+      ]
     },
-    {
-      id: "80247833",
-      balance: -11,
-      units: 'руб',
-      isActive: false
-    }
   ];
 
-  var curID = 80247834;
-  var curBalance = 7;
-  for (var i = 0; i < 20; i++) {
-    var newCard = {
-      id: '' + curID,
-      balance: curBalance,
-      units: 'руб',
-      isActive: true
-    };
-    $scope.cards.push(newCard);
-    curID += 1;
-    curBalance += 7;
-  }
-
-});
-
-mod.filter('cardBalanceFilter', function () {
-  return function (card) {
-    var balance = card.balance ? card.balance : 0;
-    var s = "" + balance;
-    if (card.units) {
-      s += " " + card.units;
-    }
-    return s;
-  };
 });

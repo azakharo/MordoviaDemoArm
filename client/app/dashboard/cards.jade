@@ -1,16 +1,10 @@
 h1 Процессинг карт
-table.table(style="margin-bottom: 0px")
-  thead
-    tr.info
-      td.w33 Статус
-      td.w33 Идентификатор
-      td.w33(style="text-align: right") Баланс
 #table-wrapper(style="height: 290px; overflow-y: auto;")
   table.table.table-bordered.table-hover.table-condensed(style="background: white; margin-bottom: 0px")
-    tbody
-      tr(ng-repeat='card in cards', ng-class="{'danger': card.balance < 0}")
-        td.w33
-          span.fa.fa-check(style="color: green", ng-if="card.isActive")
-          span.fa.fa-close(style="color: red", ng-if="!card.isActive")
-        td.w33 {{ card.id }}
-        td.w33(style="text-align: right") {{ card | cardBalanceFilter }}
+    tbody(ng-repeat='card in cards')
+      tr
+        th(colspan="3") {{ card.id }}
+      tr(ng-repeat='bag in card.bags')
+        td(style="padding-left: 30px") {{ bag.name }}
+        td(style="text-align: right") {{ bag.balance }}
+        td(style="text-align: right") {{ bag.activePeriod }}
