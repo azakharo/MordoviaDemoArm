@@ -31,6 +31,7 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, myRest) {
                 var newBag = newCard.bags[bagInd];
                 if (oldBag.balance !== newBag.balance) {
                   //log("card '" + oldCard.id + "', bag '" + oldBag.name + "': balance changed from " + oldBag.balance + " to " + newBag.balance);
+                  //log(format("card '{}', bag '{}': balance changed from {} to {}!", oldCard.id, oldBag.name, oldBag.balance, newBag.balance));
                   newBag.wasUpdated = true;
                 }
                 else {
