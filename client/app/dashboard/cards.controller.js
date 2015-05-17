@@ -12,7 +12,7 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, myRest) {
 
     myRest.getCards().then(
       function (cards) {
-        if (!angular.equals(cards, $scope.cards)) { // update only if needed
+        //if (!angular.equals(cards, $scope.cards)) { // update only if needed
           //$log.debug("cards have been updated");
 
           // Find the bags which have been changed
@@ -42,7 +42,7 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, myRest) {
 
           // Update the scope
           $scope.cards = cardsCopy;
-        }
+        //}
       }
     );
   };
