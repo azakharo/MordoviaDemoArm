@@ -59,10 +59,17 @@ mod.service(
       return deffered.promise;
     }
 
+    function selectRandomInt(maxInt) {
+      var rand = Math.random();
+      rand *= maxInt;
+      return Math.floor(rand);
+    }
+
     // Simulate cards data update
     $interval(function () {
       var card = cards[0];
-      card.bags[0].balance += 5;
+      var bagIndex = selectRandomInt(card.bags.length);
+      card.bags[bagIndex].balance += 5;
     }, 5000);
 
     // PUBLIC METHODS
