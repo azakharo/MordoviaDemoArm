@@ -11,11 +11,12 @@ table.table(style="margin-bottom: 0px")
 #table-wrapper(style="height: 290px; overflow-y: auto;")
   table.table.table-bordered.table-hover.table-condensed(style="background: white; margin-bottom: 0px")
     tbody(ng-repeat='event in events')
-      td(style="width: 5%")
-        span.fa.fa-check-circle(style="color: green", ng-if="event.isSuccess")
-        span.fa.fa-minus-circle(style="color: red", ng-if="!event.isSuccess")
-      td.w20 {{ event.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
-      td.w20 {{ event.card }}
-      td.w20 {{ event.operation }}
-      td.w20 {{ event.currency }}
-      td(style="text-align: right; width: 15%") {{ event.value }}
+      tr(ng-class="{ 'new-event': event.wasUpdated }")
+        td(style="width: 5%")
+          span.fa.fa-check-circle(style="color: green", ng-if="event.isSuccess")
+          span.fa.fa-minus-circle(style="color: red", ng-if="!event.isSuccess")
+        td.w20 {{ event.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
+        td.w20 {{ event.card }}
+        td.w20 {{ event.operation }}
+        td.w20 {{ event.currency }}
+        td(style="text-align: right; width: 15%") {{ event.value }}

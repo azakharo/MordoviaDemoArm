@@ -26,9 +26,18 @@ angular.module('demoarmApp')
     function updateEvents() {
       myRest.getEventsUpdate().then(
         function (newEvents) {
-          log("events have been updated");
+          //log("events have been updated");
+
+          // Remove wasUpdated flags
+          $scope.events.forEach(function (event) {
+            event.wasUpdated = false;
+          });
+
+          // Add the new events to the scope
+          var eventsCopy = angular.copy(newEvents);
           // push new events to beginning of the list
-          newEvents.forEach(function (event) {
+          eventsCopy.forEach(function (event) {
+            event.wasUpdated = true;
             $scope.events.unshift(event);
           });
 
