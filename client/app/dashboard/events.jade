@@ -2,7 +2,8 @@ h1(style="text-align: center") События
 table.table.table-bordered(style="margin-bottom: 0px; width: 98%")
   thead
     tr.info
-      th(colspan="2") Время
+      th
+      th Время
       th Карта
       th Операция
       th Валюта
@@ -10,7 +11,9 @@ table.table.table-bordered(style="margin-bottom: 0px; width: 98%")
 #table-wrapper(style="height: 290px; overflow-y: auto;")
   table.table.table-bordered.table-hover.table-condensed(style="background: white; margin-bottom: 0px")
     tbody(ng-repeat='event in events')
-      td {{ event.isSuccess }}
+      td
+        span.fa.fa-check-circle(style="color: green", ng-if="event.isSuccess")
+        span.fa.fa-minus-circle(style="color: red", ng-if="!event.isSuccess")
       td {{ event.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
       td {{ event.operation }}
       td {{ event.currency }}
