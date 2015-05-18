@@ -29,7 +29,10 @@ mod.controller('FlowCtrl', function ($scope, $timeout, $log) {
         }
       },
       title: {
-        text: 'Пассажиропоток'
+        text: 'Пассажиропоток',
+        style: {
+          "fontSize": "30px"
+        }
       },
       xAxis: {
         type: 'datetime',

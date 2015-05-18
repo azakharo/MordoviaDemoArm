@@ -30,7 +30,10 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log) {
         }
       },
       title: {
-        text: 'Пассажирооборот'
+        text: 'Пассажирооборот',
+        style: {
+          "fontSize": "30px"
+        }
       },
       xAxis: {
         type: 'datetime',
