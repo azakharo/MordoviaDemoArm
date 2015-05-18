@@ -1,49 +1,49 @@
 'use strict';
 
 angular.module('demoarmApp')
-  .controller('EventsCtrl', function ($scope) {
+  .controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
+    var stopAutoRefresh = null;
+    $scope.events = [];
 
-    var events = [
-      {
-        id: 1,
-        timestamp: moment().subtract(4, 'minutes').toDate(),
-        card: 80365814,
-        operation: 'пополнение',
-        currency: 'баллы',
-        value: 5,
-        isSuccess: true
-      },
-      {
-        id: 2,
-        timestamp: moment().subtract(3, 'minutes').toDate(),
-        card: 80365814,
-        operation: 'списание',
-        currency: 'баллы',
-        value: 5,
-        isSuccess: true
-      },
-      {
-        id: 3,
-        timestamp: moment().subtract(2, 'minutes').toDate(),
-        card: 80365814,
-        operation: 'пополнение',
-        currency: 'баллы',
-        value: 5,
-        isSuccess: true
-      },
-      {
-        id: 4,
-        timestamp: moment().subtract(1, 'minutes').toDate(),
-        card: 80365814,
-        operation: 'списание',
-        currency: 'баллы',
-        value: 5,
-        isSuccess: false
+    function getEvents() {
+      //if (!authService.isLoggedIn()) { // if not logger in
+      //  return; // do nothing
+      //}
+
+      myRest.getEvents().then(
+        function (events) {
+          $scope.events = angular.copy(events);
+          // Start update
+          stopAutoRefresh = $interval(function () {
+            updateEvents();
+          }, 5000);
+        }
+      );
+    };
+
+    getEvents();
+
+    function updateEvents() {
+      myRest.getEventsUpdate().then(
+        function (newEvents) {
+          log("events have been updated");
+          // push new events to beginning of the list
+          newEvents.forEach(function (event) {
+            $scope.events.unshift(event);
+          });
+
+        }
+      );
+    }
+
+    $scope.$on('$destroy', function() {
+      if (stopAutoRefresh) {
+        $interval.cancel(stopAutoRefresh);
       }
-    ];
+    });
 
-    _(events).reverse();
-
-    $scope.events = events;
+    function log(msg) {
+      $log.debug(msg);
+    }
 
   });

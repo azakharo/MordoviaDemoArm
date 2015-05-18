@@ -12,7 +12,9 @@ mod.service(
     //=====================================================
     // PUBLIC METHODS
 
+    // **************************
     // dummy cards implementation
+
     var cards = [
       {
         id: "80365814",
@@ -59,6 +61,7 @@ mod.service(
       return deffered.promise;
     }
 
+    // maxInt exclusive
     function selectRandomInt(maxInt) {
       var rand = Math.random();
       rand *= maxInt;
@@ -71,6 +74,92 @@ mod.service(
       var bagIndex = selectRandomInt(card.bags.length);
       card.bags[bagIndex].balance += 5;
     }, 5000);
+
+    // dummy cards implementation
+    // **************************
+
+    // ++++++++++++++++++++++++++++++++++++++++++
+    // dummy events impl-on
+
+    function getEvents() {
+      var deffered = $q.defer();
+
+      var events = [
+        {
+          id: 1,
+          timestamp: moment().subtract(4, 'minutes').toDate(),
+          card: 80365814,
+          operation: 'пополнение',
+          currency: 'баллы',
+          value: 5,
+          isSuccess: true
+        },
+        {
+          id: 2,
+          timestamp: moment().subtract(3, 'minutes').toDate(),
+          card: 80365814,
+          operation: 'списание',
+          currency: 'баллы',
+          value: 5,
+          isSuccess: true
+        },
+        {
+          id: 3,
+          timestamp: moment().subtract(2, 'minutes').toDate(),
+          card: 80365814,
+          operation: 'пополнение',
+          currency: 'баллы',
+          value: 5,
+          isSuccess: true
+        },
+        {
+          id: 4,
+          timestamp: moment().subtract(1, 'minutes').toDate(),
+          card: 80365814,
+          operation: 'списание',
+          currency: 'баллы',
+          value: 5,
+          isSuccess: false
+        }
+      ];
+
+      _(events).reverse();
+
+      deffered.resolve(events);
+      return deffered.promise;
+    }
+
+    var nextEventID = 5;
+    function getEventsUpdate() {
+      var deffered = $q.defer();
+      var newEvents = [];
+
+      var val = selectRandomInt(11);
+      if (val === 0) {
+        val = 1;
+      }
+
+      var rand = Math.random();
+      var oper = (rand < 0.5) ? 'списание' : 'пополнение';
+
+      var newEvent = {
+        id: nextEventID,
+        timestamp: new Date(),
+        card: 80365814,
+        operation: oper,
+        currency: 'баллы',
+        value: val,
+        isSuccess: true
+      };
+      nextEventID += 1;
+      newEvents.push(newEvent);
+
+      deffered.resolve(newEvents);
+      return deffered.promise;
+    }
+
+    // dummy events impl-on
+    // ++++++++++++++++++++++++++++++++++++++++++
 
     // PUBLIC METHODS
     //=====================================================
@@ -109,7 +198,9 @@ mod.service(
 
     // Return public API
     return ({
-      getCards: getCards
+      getCards: getCards,
+      getEvents: getEvents,
+      getEventsUpdate: getEventsUpdate
     });
 
   }
