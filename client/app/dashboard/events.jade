@@ -1,20 +1,21 @@
 h1(style="text-align: center") События
-table.table.table-bordered(style="margin-bottom: 0px; width: 98%")
+table.table.table-bordered(style="margin-bottom: 0px")
   thead
     tr.info
-      th
-      th Время
-      th Карта
-      th Операция
-      th Валюта
-      th(style="text-align: right") Сумма
+      th(style="width: 5%")
+      th.w20 Время
+      th.w20 Карта
+      th.w20 Операция
+      th.w20 Валюта
+      th(style="text-align: right; width: 15%") Сумма
 #table-wrapper(style="height: 290px; overflow-y: auto;")
   table.table.table-bordered.table-hover.table-condensed(style="background: white; margin-bottom: 0px")
     tbody(ng-repeat='event in events')
-      td
+      td(style="width: 5%")
         span.fa.fa-check-circle(style="color: green", ng-if="event.isSuccess")
         span.fa.fa-minus-circle(style="color: red", ng-if="!event.isSuccess")
-      td {{ event.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
-      td {{ event.operation }}
-      td {{ event.currency }}
-      td {{ event.value }}
+      td.w20 {{ event.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
+      td.w20 {{ event.card }}
+      td.w20 {{ event.operation }}
+      td.w20 {{ event.currency }}
+      td(style="text-align: right; width: 15%") {{ event.value }}
