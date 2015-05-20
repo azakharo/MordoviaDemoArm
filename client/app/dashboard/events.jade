@@ -1,13 +1,14 @@
 h2(style="text-align: center") События
-table.table(style="margin-bottom: 0px")
-  thead
-    tr.info
-      th(style="width: 5%")
-      th.w20 Время
-      th.w20 Карта
-      th.w20 Операция
-      th.w20 Валюта
-      th(style="text-align: right; width: 15%") Сумма
+#table-header-wrapper
+  table.table(style="margin-bottom: 0px")
+    thead
+      tr.info
+        th(style="width: 5%")
+        th.w20 Время
+        th.w20 Карта
+        th.w20 Операция
+        th.w20 Валюта
+        th(style="text-align: right; width: 15%") Сумма
 #table-wrapper(style="height: 290px; overflow-y: auto;")
   table.table.table-bordered.table-hover.table-condensed(style="background: white; margin-bottom: 0px")
     tbody(ng-repeat='event in events')
