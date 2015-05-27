@@ -159,7 +159,10 @@ mod.service(
 
                 // if last account, then resolve
                 if (accInd === srvAccounts.length - 1) {
-                  // TODO sort by timestamp desc
+                  // sort by timestamp desc
+                  transactions = _.sortBy(transactions, function (trans) {
+                    return -trans.Timestamp;
+                  });
 
                   //log('resolve');
                   deffered.resolve(transactions);
