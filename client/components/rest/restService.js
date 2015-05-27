@@ -5,6 +5,7 @@ var mod = angular.module('restService', []);
 mod.service(
   "myRest",
   function ($http, $q, $log, $rootScope, $interval) {
+    var baseURL = 'http://cp-prod.corp.sarov-itc.ru/';
 
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:admin');
     $http.defaults.headers.common['Content-type'] = 'application/json';
@@ -12,41 +13,49 @@ mod.service(
     //=====================================================
     // PUBLIC METHODS
 
+    function getAccounts() {
+      var request = $http({
+        method: "get",
+        url: baseURL + "accounts"
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
     // **************************
     // dummy cards implementation
 
-    var cards = [
-      {
-        id: "80365814",
-        bags: [
-          {
-            name: "баллы",
-            balance: 100,
-            activePeriod: "бессрочно"
-          },
-          {
-            name: "разовые поездки",
-            balance: 5,
-            activePeriod: "10.05.2015-10.06.2015"
-          },
-          {
-            name: "разовые поездки",
-            balance: 5,
-            activePeriod: "до 15.08.2015"
-          },
-        ]
-      },
-      {
-        id: "80365815",
-        bags: [
-          {
-            name: "разовые поездки",
-            balance: 10,
-            activePeriod: "бессрочно"
-          }
-        ]
-      }
-    ];
+    //var cards = [
+    //  {
+    //    id: "80365814",
+    //    bags: [
+    //      {
+    //        name: "баллы",
+    //        balance: 100,
+    //        activePeriod: "бессрочно"
+    //      },
+    //      {
+    //        name: "разовые поездки",
+    //        balance: 5,
+    //        activePeriod: "10.05.2015-10.06.2015"
+    //      },
+    //      {
+    //        name: "разовые поездки",
+    //        balance: 5,
+    //        activePeriod: "до 15.08.2015"
+    //      },
+    //    ]
+    //  },
+    //  {
+    //    id: "80365815",
+    //    bags: [
+    //      {
+    //        name: "разовые поездки",
+    //        balance: 10,
+    //        activePeriod: "бессрочно"
+    //      }
+    //    ]
+    //  }
+    //];
 
     function getCards() {
       //var request = $http({
@@ -57,7 +66,8 @@ mod.service(
 
       // dummy impl-on
       var deffered = $q.defer();
-      deffered.resolve(cards);
+      //deffered.resolve(cards);
+      deffered.resolve([]);
       return deffered.promise;
     }
 
@@ -69,11 +79,11 @@ mod.service(
     }
 
     // Simulate cards data update
-    $interval(function () {
-      var card = cards[0];
-      var bagIndex = selectRandomInt(card.bags.length);
-      card.bags[bagIndex].balance += 5;
-    }, 5000);
+    //$interval(function () {
+    //  var card = cards[0];
+    //  var bagIndex = selectRandomInt(card.bags.length);
+    //  card.bags[bagIndex].balance += 5;
+    //}, 5000);
 
     // dummy cards implementation
     // **************************
@@ -198,9 +208,10 @@ mod.service(
 
     // Return public API
     return ({
-      getCards: getCards,
-      getEvents: getEvents,
-      getEventsUpdate: getEventsUpdate
+      getAccounts:      getAccounts,
+      getCards:         getCards,
+      getEvents:        getEvents,
+      getEventsUpdate:  getEventsUpdate
     });
 
   }
