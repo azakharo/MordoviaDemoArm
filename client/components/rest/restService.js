@@ -21,6 +21,14 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function getAccountBags(accountID) {
+      var request = $http({
+        method: "get",
+        url: baseURL + format('accounts/{}/bags', accountID)
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
     // **************************
     // dummy cards implementation
 
@@ -57,19 +65,13 @@ mod.service(
     //  }
     //];
 
-    function getCards() {
+    //function getCards() {
       //var request = $http({
       //  method: "get",
       //  url: "api/cards"
       //});
       //return ( request.then(handleSuccess, handleError) );
-
-      // dummy impl-on
-      var deffered = $q.defer();
-      //deffered.resolve(cards);
-      deffered.resolve([]);
-      return deffered.promise;
-    }
+    //}
 
     // maxInt exclusive
     function selectRandomInt(maxInt) {
@@ -209,7 +211,7 @@ mod.service(
     // Return public API
     return ({
       getAccounts:      getAccounts,
-      getCards:         getCards,
+      getAccountBags:   getAccountBags,
       getEvents:        getEvents,
       getEventsUpdate:  getEventsUpdate
     });

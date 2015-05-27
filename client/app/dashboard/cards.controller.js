@@ -16,7 +16,21 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
           card.id = srvAcc.Number;
 
           // Request bags for the account
+          card.bags = [];
+          myRest.getAccountBags(srvAcc.Id).then(
+            function (srvBags) {
+              srvBags.forEach(function (srvBag) {
+                var bag = {};
+                //log(srvBag.TimeFrame.StartTimestamp);
+                //log(srvBag.TimeFrame.FinishTimestamp);
+                bag.activePeriodStart = moment.unix(srvBag.TimeFrame.StartTimestamp);
+                bag.activePeriodFinish = moment.unix(srvBag.TimeFrame.FinishTimestamp);
+                log('bag');
+                card.bags.push(bag);
+              });
+            });
 
+          log('resolve');
           newCards.push(card);
         });
 
@@ -79,4 +93,19 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
     $log.debug(msg);
   }
 
+});
+
+mod.filter('bagActivePeriodFilter', function () {
+  return function (bag) {
+    var start = "";
+    var finish = "";
+    var dateFrmt = 'DD.MM.YYYY';
+    if (bag.activePeriodStart) {
+      start = bag.activePeriodStart.format(dateFrmt);
+    }
+    if (bag.activePeriodFinish) {
+      finish = bag.activePeriodFinish.format(dateFrmt);
+    }
+    return format("{} - {}", start, finish);
+  };
 });
