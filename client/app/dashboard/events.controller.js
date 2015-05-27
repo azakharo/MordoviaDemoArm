@@ -10,8 +10,27 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
     //$scope.currencies = currencies;
     myRest.getCards(currencies).then(function(cards){
       myRest.getAllTransactions().then(function(srvTransactions){
-        //$scope.transactions = srvTransactions;
-        // TODO Update the scope
+        var events = [];
+        var eventInd = 0;
+        srvTransactions.forEach(function (srvTrans) {
+          var event = {};
+          event.id = eventInd + 1;
+          event.srvTransactionID = srvTrans.Id;
+          event.timestamp = moment.unix(srvTrans.Timestamp).toDate();
+          event.card = "card";
+          event.operation = srvTrans.Type;
+          event.currency = _.find(currencies, function (curr) {
+            return curr.code === srvTrans.SourcePayload.CurrencyCode;
+          });
+          event.value = srvTrans.Value;
+          event.isSuccess = (srvTrans.States[0].State === "Accepted") ? true : false;
+
+          events.push(event);
+          eventInd += 1;
+        });
+
+        // Update the scope
+        $scope.events = events;
         log("DONE");
       });
     });

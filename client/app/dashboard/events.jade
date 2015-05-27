@@ -19,6 +19,6 @@ h2(style="text-align: center") События
         td.w20 {{ event.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
         td.w20 {{ event.card }}
         td.w20 {{ event.operation }}
-        td.w20 {{ event.currency }}
+        td.w20 {{ event.currency.name }}
         td(style="text-align: right; width: 15%") {{ event.value }}
 //pre {{ transactions }}

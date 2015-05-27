@@ -378,6 +378,5 @@ mod.service(
       getCurrencies:    getCurrencies,
       getCards:         getCards
     });
-
   }
 );
