@@ -1,58 +1,61 @@
 'use strict';
 
-angular.module('demoarmApp')
-  .controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
-    var stopAutoRefresh = null;
-    $scope.events = [];
+var mod = angular.module('demoarmApp');
 
-    function getEvents() {
-      //if (!authService.isLoggedIn()) { // if not logger in
-      //  return; // do nothing
-      //}
+mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
+  //var stopAutoRefresh = null;
+  $scope.events = [];
 
-      myRest.getEvents().then(
-        function (events) {
-          $scope.events = angular.copy(events);
-          // Start update
-          stopAutoRefresh = $interval(function () {
-            updateEvents();
-          }, 5000);
-        }
-      );
-    };
 
-    getEvents();
 
-    function updateEvents() {
-      myRest.getEventsUpdate().then(
-        function (newEvents) {
-          //log("events have been updated");
+  //function getEvents() {
+  //  //if (!authService.isLoggedIn()) { // if not logger in
+  //  //  return; // do nothing
+  //  //}
+  //
+  //  myRest.getEvents().then(
+  //    function (events) {
+  //      $scope.events = angular.copy(events);
+  //      // Start update
+  //      stopAutoRefresh = $interval(function () {
+  //        updateEvents();
+  //      }, 5000);
+  //    }
+  //  );
+  //};
+  //
+  //getEvents();
 
-          // Remove wasUpdated flags
-          $scope.events.forEach(function (event) {
-            event.wasUpdated = false;
-          });
+  //function updateEvents() {
+  //  myRest.getEventsUpdate().then(
+  //    function (newEvents) {
+  //      //log("events have been updated");
+  //
+  //      // Remove wasUpdated flags
+  //      $scope.events.forEach(function (event) {
+  //        event.wasUpdated = false;
+  //      });
+  //
+  //      // Add the new events to the scope
+  //      var eventsCopy = angular.copy(newEvents);
+  //      // push new events to beginning of the list
+  //      eventsCopy.forEach(function (event) {
+  //        event.wasUpdated = true;
+  //        $scope.events.unshift(event);
+  //      });
+  //
+  //    }
+  //  );
+  //}
+  //
+  //$scope.$on('$destroy', function() {
+  //  if (stopAutoRefresh) {
+  //    $interval.cancel(stopAutoRefresh);
+  //  }
+  //});
 
-          // Add the new events to the scope
-          var eventsCopy = angular.copy(newEvents);
-          // push new events to beginning of the list
-          eventsCopy.forEach(function (event) {
-            event.wasUpdated = true;
-            $scope.events.unshift(event);
-          });
+  function log(msg) {
+    $log.debug(msg);
+  }
 
-        }
-      );
-    }
-
-    $scope.$on('$destroy', function() {
-      if (stopAutoRefresh) {
-        $interval.cancel(stopAutoRefresh);
-      }
-    });
-
-    function log(msg) {
-      $log.debug(msg);
-    }
-
-  });
+});
