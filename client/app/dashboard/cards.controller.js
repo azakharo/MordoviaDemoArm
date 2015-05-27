@@ -68,6 +68,9 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
                   return curr.srvID === srvBag.CurrencyId;
                 });
 
+                // TODO Dummy balance
+                bag.balance = 0;
+
                 //log('bag');
                 card.bags.push(bag);
               });
@@ -91,39 +94,6 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
     );
 
     return deffered.promise;
-
-    //myRest.getCards().then(
-    //  function (cards) {
-    //    // Find the bags which have been changed
-    //    var cardsCopy = angular.copy(cards);
-    //    if ($scope.cards.length > 0) {
-    //      // TODO Assumed that only bag balances are changed
-    //      for (var cardInd = 0; cardInd < cardsCopy.length; cardInd++) {
-    //        var oldCard = $scope.cards[cardInd];
-    //        var newCard = cardsCopy[cardInd];
-    //        // Nothing changed in the card, skip
-    //        if (angular.equals(oldCard, newCard)) {
-    //          continue;
-    //        }
-    //        for (var bagInd = 0; bagInd < oldCard.bags.length; bagInd++) {
-    //          var oldBag = oldCard.bags[bagInd];
-    //          var newBag = newCard.bags[bagInd];
-    //          if (oldBag.balance !== newBag.balance) {
-    //            //log("card '" + oldCard.id + "', bag '" + oldBag.name + "': balance changed from " + oldBag.balance + " to " + newBag.balance);
-    //            //log(format("card '{}', bag '{}': balance changed from {} to {}!", oldCard.id, oldBag.name, oldBag.balance, newBag.balance));
-    //            newBag.wasUpdated = true;
-    //          }
-    //          else {
-    //            newBag.wasUpdated = false;
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    // Update the scope
-    //    $scope.cards = cardsCopy;
-    //  }
-    //);
   }
 
   getCurrencies().then(function(currencies){
@@ -134,18 +104,50 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
     });
   });
 
-  //var stopAutoRefresh = $interval(function () {
-  //  updateCards();
-  //}, 5000);
-  //
-  //$scope.$on('$destroy', function () {
-  //  $interval.cancel(stopAutoRefresh);
-  //});
+  var stopAutoRefresh = $interval(function () {
+    getCurrencies().then(function(currencies){
+      //$scope.currencies = currencies;
+      getCards(currencies).then(function(cards){
+
+        // Find the bags which have been changed
+        var cardsCopy = angular.copy(cards);
+        if ($scope.cards.length > 0) {
+          // TODO Assumed that only bag balances are changed
+          for (var cardInd = 0; cardInd < cardsCopy.length; cardInd++) {
+            var oldCard = $scope.cards[cardInd];
+            var newCard = cardsCopy[cardInd];
+            // Nothing changed in the card, skip
+            if (angular.equals(oldCard, newCard)) {
+              continue;
+            }
+            for (var bagInd = 0; bagInd < oldCard.bags.length; bagInd++) {
+              var oldBag = oldCard.bags[bagInd];
+              var newBag = newCard.bags[bagInd];
+              if (oldBag.balance !== newBag.balance) {
+                //log("card '" + oldCard.id + "', bag '" + oldBag.name + "': balance changed from " + oldBag.balance + " to " + newBag.balance);
+                //log(format("card '{}', bag '{}': balance changed from {} to {}!", oldCard.id, oldBag.name, oldBag.balance, newBag.balance));
+                newBag.wasUpdated = true;
+              }
+              else {
+                newBag.wasUpdated = false;
+              }
+            }
+          }
+        }
+
+        // Update the scope
+        $scope.cards = cardsCopy;
+      });
+    });
+  }, 5000);
+
+  $scope.$on('$destroy', function () {
+    $interval.cancel(stopAutoRefresh);
+  });
 
   function log(msg) {
     $log.debug(msg);
   }
-
 });
 
 mod.filter('bagActivePeriodFilter', function () {
