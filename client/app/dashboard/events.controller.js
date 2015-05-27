@@ -6,8 +6,6 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
   //var stopAutoRefresh = null;
   $scope.events = [];
 
-
-
   //function getEvents() {
   //  //if (!authService.isLoggedIn()) { // if not logger in
   //  //  return; // do nothing

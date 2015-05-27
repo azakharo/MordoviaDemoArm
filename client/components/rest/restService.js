@@ -45,6 +45,97 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function getCurrencies() {
+      var currencies = [];
+      var deffered = $q.defer();
+
+      getApps().then(
+        function(srvApps) {
+          if (srvApps.length === 0) {
+            deffered.resolve(currencies);
+          }
+          var appID = srvApps[0].Id;
+          getAppCurrencies(appID).then(
+            function(srvCurrencies) {
+              srvCurrencies.forEach(function (srvCurr) {
+                var curr = {};
+                curr.srvID = srvCurr.Id;
+                curr.code = srvCurr.Code;
+                curr.name = srvCurr.Info.Title;
+                currencies.push(curr);
+              });
+
+              deffered.resolve(currencies);
+            },
+            function(reason) {
+              deffered.reject(reason);
+            }
+          );
+
+        },
+        function(reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    function getCards(currencies) {
+      var newCards = [];
+      var deffered = $q.defer();
+
+      getAccounts().then(
+        function (srvAccounts) {
+          var accInd = 0;
+          srvAccounts.forEach(function (srvAcc) {
+            var card = {};
+            card.id = srvAcc.Number;
+            card.srvAccountID = srvAcc.Id;
+
+            // Request bags for the account
+            card.bags = [];
+            getAccountBags(srvAcc.Id).then(
+              function (srvBags) {
+                srvBags.forEach(function (srvBag) {
+                  var bag = {};
+                  bag.srvID = srvBag.Id;
+                  bag.activePeriodStart = moment.unix(srvBag.TimeFrame.StartTimestamp);
+                  bag.activePeriodFinish = moment.unix(srvBag.TimeFrame.FinishTimestamp);
+
+                  // Get currency by its server id
+                  bag.currency = _.find(currencies, function (curr) {
+                    return curr.srvID === srvBag.CurrencyId;
+                  });
+
+                  // TODO Dummy balance
+                  bag.balance = 0;
+
+                  //log('bag');
+                  card.bags.push(bag);
+                });
+
+                newCards.push(card);
+
+                // if last card, then resolve
+                if (accInd === srvAccounts.length - 1) {
+                  //log('resolve');
+                  deffered.resolve(newCards);
+                }
+
+                accInd += 1;
+              });
+          });
+
+        },
+        function (reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
     // **************************
     // dummy cards implementation
 
@@ -231,7 +322,11 @@ mod.service(
       getApps:          getApps,
       getAppCurrencies: getAppCurrencies,
       getEvents:        getEvents,
-      getEventsUpdate:  getEventsUpdate
+      getEventsUpdate:  getEventsUpdate,
+      //-------------------------------------------------------------
+      // methods which return app specific models (not server models)
+      getCurrencies:    getCurrencies,
+      getCards:         getCards
     });
 
   }
