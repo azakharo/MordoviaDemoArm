@@ -5,7 +5,7 @@ h2(style="text-align: center") Процессинг карт
       tr
         th(colspan="3") {{ card.id }}
       tr(ng-repeat='bag in card.bags')
-        td(style="padding-left: 30px;") {{ bag.name }}
+        td(style="padding-left: 30px;") {{ bag.currency.name }}
         td(style="text-align: right;", ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
         td(style="text-align: right;") {{ bag | bagActivePeriodFilter }}
-//pre {{ bags }}
+//pre {{ currencies }}

@@ -5,7 +5,43 @@ var mod = angular.module('demoarmApp');
 mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
   $scope.cards = [];
 
-  function getCards() {
+  function getCurrencies() {
+    var currencies = [];
+    var deffered = $q.defer();
+
+    myRest.getApps().then(
+      function(srvApps) {
+        if (srvApps.length === 0) {
+          deffered.resolve(currencies);
+        }
+        var appID = srvApps[0].Id;
+        myRest.getAppCurrencies(appID).then(
+          function(srvCurrencies) {
+            srvCurrencies.forEach(function (srvCurr) {
+              var curr = {};
+              curr.srvID = srvCurr.Id;
+              curr.code = srvCurr.Code;
+              curr.name = srvCurr.Info.Title;
+              currencies.push(curr);
+            });
+
+            deffered.resolve(currencies);
+          },
+          function(reason) {
+            deffered.reject(reason);
+          }
+        );
+
+      },
+      function(reason) {
+        deffered.reject(reason);
+      }
+    );
+
+    return deffered.promise;
+  }
+
+  function getCards(currencies) {
     var newCards = [];
     var deffered = $q.defer();
 
@@ -14,6 +50,7 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
         srvAccounts.forEach(function (srvAcc) {
           var card = {};
           card.id = srvAcc.Number;
+          card.srvAccountID = srvAcc.Id;
 
           // Request bags for the account
           card.bags = [];
@@ -21,10 +58,15 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
             function (srvBags) {
               srvBags.forEach(function (srvBag) {
                 var bag = {};
-                //log(srvBag.TimeFrame.StartTimestamp);
-                //log(srvBag.TimeFrame.FinishTimestamp);
+                bag.srvID = srvBag.Id;
                 bag.activePeriodStart = moment.unix(srvBag.TimeFrame.StartTimestamp);
                 bag.activePeriodFinish = moment.unix(srvBag.TimeFrame.FinishTimestamp);
+
+                // Get currency by its server id
+                bag.currency = _.find(currencies, function (curr) {
+                  return curr.srvID === srvBag.CurrencyId;
+                });
+
                 log('bag');
                 card.bags.push(bag);
               });
@@ -76,9 +118,13 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
     //  }
     //);
   }
-  getCards().then(function(newCards){
-    // Update the scope
-    $scope.cards = newCards;
+
+  getCurrencies().then(function(currencies){
+    //$scope.currencies = currencies;
+    getCards(currencies).then(function(newCards){
+      // Update the scope
+      $scope.cards = newCards;
+    });
   });
 
   //var stopAutoRefresh = $interval(function () {

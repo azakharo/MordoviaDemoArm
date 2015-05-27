@@ -29,6 +29,22 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function getApps() {
+      var request = $http({
+        method: "get",
+        url: baseURL + "applications"
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
+    function getAppCurrencies(appID) {
+      var request = $http({
+        method: "get",
+        url: baseURL + format('applications/{}/currencies', appID)
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
     // **************************
     // dummy cards implementation
 
@@ -212,6 +228,8 @@ mod.service(
     return ({
       getAccounts:      getAccounts,
       getAccountBags:   getAccountBags,
+      getApps:          getApps,
+      getAppCurrencies: getAppCurrencies,
       getEvents:        getEvents,
       getEventsUpdate:  getEventsUpdate
     });
