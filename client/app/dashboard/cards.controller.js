@@ -47,6 +47,7 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
 
     myRest.getAccounts().then(
       function (srvAccounts) {
+        var accInd = 0;
         srvAccounts.forEach(function (srvAcc) {
           var card = {};
           card.id = srvAcc.Number;
@@ -67,16 +68,22 @@ mod.controller('CardsCtrl', function ($scope, $interval, $log, $q, myRest) {
                   return curr.srvID === srvBag.CurrencyId;
                 });
 
-                log('bag');
+                //log('bag');
                 card.bags.push(bag);
               });
-            });
 
-          log('resolve');
-          newCards.push(card);
+              newCards.push(card);
+
+              // if last card, then resolve
+              if (accInd === srvAccounts.length - 1) {
+                //log('resolve');
+                deffered.resolve(newCards);
+              }
+
+              accInd += 1;
+            });
         });
 
-        deffered.resolve(newCards);
       },
       function (reason) {
         deffered.reject(reason);
