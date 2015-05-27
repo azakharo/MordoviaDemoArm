@@ -29,6 +29,14 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function getAccountTransactions(accountID) {
+      var request = $http({
+        method: "get",
+        url: baseURL + format('accounts/{}/transactions', accountID)
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
     function getApps() {
       var request = $http({
         method: "get",
@@ -136,6 +144,39 @@ mod.service(
       return deffered.promise;
     }
 
+    function getAllTransactions() {
+      var transactions = [];
+      var deffered = $q.defer();
+
+      getAccounts().then(
+        function (srvAccounts) {
+          var accInd = 0;
+          srvAccounts.forEach(function (srvAcc) {
+            // Request transactions for the account
+            getAccountTransactions(srvAcc.Id).then(
+              function (srvTransactions) {
+                transactions = transactions.concat(srvTransactions);
+
+                // if last account, then resolve
+                if (accInd === srvAccounts.length - 1) {
+                  // TODO sort by timestamp desc
+
+                  //log('resolve');
+                  deffered.resolve(transactions);
+                }
+
+                accInd += 1;
+              });
+          });
+        },
+        function (reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
     // **************************
     // dummy cards implementation
 
@@ -200,82 +241,82 @@ mod.service(
     // ++++++++++++++++++++++++++++++++++++++++++
     // dummy events impl-on
 
-    function getEvents() {
-      var deffered = $q.defer();
-
-      var events = [
-        {
-          id: 1,
-          timestamp: moment().subtract(4, 'minutes').toDate(),
-          card: 80365814,
-          operation: 'пополнение',
-          currency: 'баллы',
-          value: 5,
-          isSuccess: true
-        },
-        {
-          id: 2,
-          timestamp: moment().subtract(3, 'minutes').toDate(),
-          card: 80365814,
-          operation: 'списание',
-          currency: 'баллы',
-          value: 5,
-          isSuccess: true
-        },
-        {
-          id: 3,
-          timestamp: moment().subtract(2, 'minutes').toDate(),
-          card: 80365814,
-          operation: 'пополнение',
-          currency: 'баллы',
-          value: 5,
-          isSuccess: true
-        },
-        {
-          id: 4,
-          timestamp: moment().subtract(1, 'minutes').toDate(),
-          card: 80365814,
-          operation: 'списание',
-          currency: 'баллы',
-          value: 5,
-          isSuccess: false
-        }
-      ];
-
-      _(events).reverse();
-
-      deffered.resolve(events);
-      return deffered.promise;
-    }
-
-    var nextEventID = 5;
-    function getEventsUpdate() {
-      var deffered = $q.defer();
-      var newEvents = [];
-
-      var val = selectRandomInt(11);
-      if (val === 0) {
-        val = 1;
-      }
-
-      var rand = Math.random();
-      var oper = (rand < 0.5) ? 'списание' : 'пополнение';
-
-      var newEvent = {
-        id: nextEventID,
-        timestamp: new Date(),
-        card: 80365814,
-        operation: oper,
-        currency: 'баллы',
-        value: val,
-        isSuccess: true
-      };
-      nextEventID += 1;
-      newEvents.push(newEvent);
-
-      deffered.resolve(newEvents);
-      return deffered.promise;
-    }
+    //function getEvents() {
+    //  var deffered = $q.defer();
+    //
+    //  var events = [
+    //    {
+    //      id: 1,
+    //      timestamp: moment().subtract(4, 'minutes').toDate(),
+    //      card: 80365814,
+    //      operation: 'пополнение',
+    //      currency: 'баллы',
+    //      value: 5,
+    //      isSuccess: true
+    //    },
+    //    {
+    //      id: 2,
+    //      timestamp: moment().subtract(3, 'minutes').toDate(),
+    //      card: 80365814,
+    //      operation: 'списание',
+    //      currency: 'баллы',
+    //      value: 5,
+    //      isSuccess: true
+    //    },
+    //    {
+    //      id: 3,
+    //      timestamp: moment().subtract(2, 'minutes').toDate(),
+    //      card: 80365814,
+    //      operation: 'пополнение',
+    //      currency: 'баллы',
+    //      value: 5,
+    //      isSuccess: true
+    //    },
+    //    {
+    //      id: 4,
+    //      timestamp: moment().subtract(1, 'minutes').toDate(),
+    //      card: 80365814,
+    //      operation: 'списание',
+    //      currency: 'баллы',
+    //      value: 5,
+    //      isSuccess: false
+    //    }
+    //  ];
+    //
+    //  _(events).reverse();
+    //
+    //  deffered.resolve(events);
+    //  return deffered.promise;
+    //}
+    //
+    //var nextEventID = 5;
+    //function getEventsUpdate() {
+    //  var deffered = $q.defer();
+    //  var newEvents = [];
+    //
+    //  var val = selectRandomInt(11);
+    //  if (val === 0) {
+    //    val = 1;
+    //  }
+    //
+    //  var rand = Math.random();
+    //  var oper = (rand < 0.5) ? 'списание' : 'пополнение';
+    //
+    //  var newEvent = {
+    //    id: nextEventID,
+    //    timestamp: new Date(),
+    //    card: 80365814,
+    //    operation: oper,
+    //    currency: 'баллы',
+    //    value: val,
+    //    isSuccess: true
+    //  };
+    //  nextEventID += 1;
+    //  newEvents.push(newEvent);
+    //
+    //  deffered.resolve(newEvents);
+    //  return deffered.promise;
+    //}
 
     // dummy events impl-on
     // ++++++++++++++++++++++++++++++++++++++++++
@@ -312,6 +353,10 @@ mod.service(
       return ( response.data );
     }
 
+    function log(msg) {
+      $log.debug(msg);
+    }
+
     // PRIVATE METHODS
     //*************************************************************************
 
@@ -319,10 +364,12 @@ mod.service(
     return ({
       getAccounts:      getAccounts,
       getAccountBags:   getAccountBags,
+      getAccountTransactions: getAccountTransactions,
       getApps:          getApps,
       getAppCurrencies: getAppCurrencies,
-      getEvents:        getEvents,
-      getEventsUpdate:  getEventsUpdate,
+      //getEvents:        getEvents,
+      //getEventsUpdate:  getEventsUpdate,
+      getAllTransactions: getAllTransactions,
       //-------------------------------------------------------------
       // methods which return app specific models (not server models)
       getCurrencies:    getCurrencies,

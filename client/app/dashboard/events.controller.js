@@ -6,6 +6,17 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
   //var stopAutoRefresh = null;
   $scope.events = [];
 
+  myRest.getCurrencies().then(function(currencies){
+    //$scope.currencies = currencies;
+    myRest.getCards(currencies).then(function(cards){
+      myRest.getAllTransactions().then(function(srvTransactions){
+        //$scope.transactions = srvTransactions;
+        // TODO Update the scope
+        log("DONE");
+      });
+    });
+  });
+
   //function getEvents() {
   //  //if (!authService.isLoggedIn()) { // if not logger in
   //  //  return; // do nothing
