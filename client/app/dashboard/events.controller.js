@@ -17,7 +17,7 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
           event.id = eventInd + 1;
           event.srvTransactionID = srvTrans.Id;
           event.timestamp = moment.unix(srvTrans.Timestamp).toDate();
-          event.card = "card";
+          event.card = findCardByBagID(cards, srvTrans.BagId);
           event.operation = srvTrans.Type;
           event.currency = _.find(currencies, function (curr) {
             return curr.code === srvTrans.SourcePayload.CurrencyCode;
@@ -35,6 +35,22 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
       });
     });
   });
+
+  function findCardByBagID(cards, srvBagID) {
+    var card2ret = undefined;
+    _(cards).forEach(function(card) {
+      _(card.bags).forEach(function(bag) {
+        if (bag.srvID === srvBagID) {
+          card2ret = card;
+          return false;
+        }
+      });
+      if (card2ret) {
+        return false;
+      }
+    });
+    return card2ret;
+  }
 
   //function getEvents() {
   //  //if (!authService.isLoggedIn()) { // if not logger in
@@ -86,4 +102,17 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
     $log.debug(msg);
   }
 
+});
+
+mod.filter('eventOperationFilter', function () {
+  return function (operation) {
+    var oper = "неизвестная";
+    if (operation === "replenishment") {
+      oper = "пополнение";
+    }
+    else if (operation === "payment") {
+      oper = "списание";
+    }
+    return oper;
+  };
 });
