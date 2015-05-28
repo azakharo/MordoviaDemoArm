@@ -53,17 +53,44 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, $q, myRest) {
   getEvents().then(function (events) {
     // Update the scope
     $scope.events = events;
-
     // Start auto update
-    stopAutoRefresh = $interval(function () {
-      getEvents().then(function(evts){
-        $scope.events = events;
-        log("DONE2");
-      });
-    }, 5000);
-
-    log("DONE");
+    stopAutoRefresh = $interval(updateEvents, 5000);
+    //log("Got events");
   });
+
+  function updateEvents() {
+    getEvents().then(function(newlyReceivedEvents){
+
+      // Remove wasUpdated flags
+      $scope.events.forEach(function (event) {
+        event.wasUpdated = false;
+      });
+
+      // Find new events, set wasUpdated flag and add them to the beginning of the list
+      var newEvents = [];
+      _(newlyReceivedEvents).forEach(function(newlyRecvEvent) {
+        var found = _($scope.events).find(function(oldEvent) {
+          return oldEvent.srvTransactionID === newlyRecvEvent.srvTransactionID;
+        });
+        if (!found) {
+          newEvents.push(newlyRecvEvent);
+        }
+        else {
+          //log("no new events found");
+          return false;
+        }
+      });
+      if (newEvents.length > 0) {
+        _(newEvents).reverse();
+        newEvents.forEach(function (event) {
+          event.wasUpdated = true;
+          $scope.events.unshift(event);
+        });
+      }
+
+      //log("Updated events");
+    });
+  }
 
   function findCardByBagID(cards, srvBagID) {
     var card2ret = undefined;
@@ -80,28 +107,6 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, $q, myRest) {
     });
     return card2ret;
   }
-
-  //function updateEvents() {
-  //  myRest.getEventsUpdate().then(
-  //    function (newEvents) {
-  //      //log("events have been updated");
-  //
-  //      // Remove wasUpdated flags
-  //      $scope.events.forEach(function (event) {
-  //        event.wasUpdated = false;
-  //      });
-  //
-  //      // Add the new events to the scope
-  //      var eventsCopy = angular.copy(newEvents);
-  //      // push new events to beginning of the list
-  //      eventsCopy.forEach(function (event) {
-  //        event.wasUpdated = true;
-  //        $scope.events.unshift(event);
-  //      });
-  //
-  //    }
-  //  );
-  //}
 
   $scope.$on('$destroy', function() {
     if (stopAutoRefresh) {
