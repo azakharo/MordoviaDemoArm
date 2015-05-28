@@ -180,149 +180,37 @@ mod.service(
       return deffered.promise;
     }
 
-    // **************************
-    // dummy cards implementation
-
-    //var cards = [
-    //  {
-    //    id: "80365814",
-    //    bags: [
-    //      {
-    //        name: "баллы",
-    //        balance: 100,
-    //        activePeriod: "бессрочно"
-    //      },
-    //      {
-    //        name: "разовые поездки",
-    //        balance: 5,
-    //        activePeriod: "10.05.2015-10.06.2015"
-    //      },
-    //      {
-    //        name: "разовые поездки",
-    //        balance: 5,
-    //        activePeriod: "до 15.08.2015"
-    //      },
-    //    ]
-    //  },
-    //  {
-    //    id: "80365815",
-    //    bags: [
-    //      {
-    //        name: "разовые поездки",
-    //        balance: 10,
-    //        activePeriod: "бессрочно"
-    //      }
-    //    ]
-    //  }
-    //];
-
-    //function getCards() {
-      //var request = $http({
-      //  method: "get",
-      //  url: "api/cards"
-      //});
-      //return ( request.then(handleSuccess, handleError) );
-    //}
-
-    // maxInt exclusive
-    function selectRandomInt(maxInt) {
-      var rand = Math.random();
-      rand *= maxInt;
-      return Math.floor(rand);
+    function findCardByBagID(cards, srvBagID) {
+      var card2ret = undefined;
+      _(cards).forEach(function(card) {
+        _(card.bags).forEach(function(bag) {
+          if (bag.srvID === srvBagID) {
+            card2ret = card;
+            return false;
+          }
+        });
+        if (card2ret) {
+          return false;
+        }
+      });
+      return card2ret;
     }
 
-    // Simulate cards data update
-    //$interval(function () {
-    //  var card = cards[0];
-    //  var bagIndex = selectRandomInt(card.bags.length);
-    //  card.bags[bagIndex].balance += 5;
-    //}, 5000);
-
-    // dummy cards implementation
-    // **************************
-
-    // ++++++++++++++++++++++++++++++++++++++++++
-    // dummy events impl-on
-
-    //function getEvents() {
-    //  var deffered = $q.defer();
-    //
-    //  var events = [
-    //    {
-    //      id: 1,
-    //      timestamp: moment().subtract(4, 'minutes').toDate(),
-    //      card: 80365814,
-    //      operation: 'пополнение',
-    //      currency: 'баллы',
-    //      value: 5,
-    //      isSuccess: true
-    //    },
-    //    {
-    //      id: 2,
-    //      timestamp: moment().subtract(3, 'minutes').toDate(),
-    //      card: 80365814,
-    //      operation: 'списание',
-    //      currency: 'баллы',
-    //      value: 5,
-    //      isSuccess: true
-    //    },
-    //    {
-    //      id: 3,
-    //      timestamp: moment().subtract(2, 'minutes').toDate(),
-    //      card: 80365814,
-    //      operation: 'пополнение',
-    //      currency: 'баллы',
-    //      value: 5,
-    //      isSuccess: true
-    //    },
-    //    {
-    //      id: 4,
-    //      timestamp: moment().subtract(1, 'minutes').toDate(),
-    //      card: 80365814,
-    //      operation: 'списание',
-    //      currency: 'баллы',
-    //      value: 5,
-    //      isSuccess: false
-    //    }
-    //  ];
-    //
-    //  _(events).reverse();
-    //
-    //  deffered.resolve(events);
-    //  return deffered.promise;
-    //}
-    //
-    //var nextEventID = 5;
-    //function getEventsUpdate() {
-    //  var deffered = $q.defer();
-    //  var newEvents = [];
-    //
-    //  var val = selectRandomInt(11);
-    //  if (val === 0) {
-    //    val = 1;
-    //  }
-    //
-    //  var rand = Math.random();
-    //  var oper = (rand < 0.5) ? 'списание' : 'пополнение';
-    //
-    //  var newEvent = {
-    //    id: nextEventID,
-    //    timestamp: new Date(),
-    //    card: 80365814,
-    //    operation: oper,
-    //    currency: 'баллы',
-    //    value: val,
-    //    isSuccess: true
-    //  };
-    //  nextEventID += 1;
-    //  newEvents.push(newEvent);
-    //
-    //  deffered.resolve(newEvents);
-    //  return deffered.promise;
-    //}
-
-    // dummy events impl-on
-    // ++++++++++++++++++++++++++++++++++++++++++
+    function findBag(cards, srvBagID) {
+      var bag2ret = undefined;
+      _(cards).forEach(function(card) {
+        _(card.bags).forEach(function(bag) {
+          if (bag.srvID === srvBagID) {
+            bag2ret = bag;
+            return false;
+          }
+        });
+        if (bag2ret) {
+          return false;
+        }
+      });
+      return bag2ret;
+    }
 
     // PUBLIC METHODS
     //=====================================================
@@ -370,13 +258,13 @@ mod.service(
       getAccountTransactions: getAccountTransactions,
       getApps:          getApps,
       getAppCurrencies: getAppCurrencies,
-      //getEvents:        getEvents,
-      //getEventsUpdate:  getEventsUpdate,
       getAllTransactions: getAllTransactions,
       //-------------------------------------------------------------
       // methods which return app specific models (not server models)
       getCurrencies:    getCurrencies,
-      getCards:         getCards
+      getCards:         getCards,
+      findCardByBagID:  findCardByBagID,
+      findBag:          findBag
     });
   }
 );

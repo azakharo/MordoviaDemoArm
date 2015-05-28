@@ -22,10 +22,10 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, $q, myRest) {
                   event.id = eventInd + 1;
                   event.srvTransactionID = srvTrans.Id;
                   event.timestamp = moment.unix(srvTrans.Timestamp).toDate();
-                  event.card = findCardByBagID(cards, srvTrans.BagId);
+                  event.card = myRest.findCardByBagID(cards, srvTrans.BagId);
                   event.operation = srvTrans.Type;
 
-                  var bag = findBag(cards, srvTrans.BagId);
+                  var bag = myRest.findBag(cards, srvTrans.BagId);
                   if (bag) {
                     event.currency = bag.currency;
                   }
@@ -93,38 +93,6 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, $q, myRest) {
 
       //log("Updated events");
     });
-  }
-
-  function findCardByBagID(cards, srvBagID) {
-    var card2ret = undefined;
-    _(cards).forEach(function(card) {
-      _(card.bags).forEach(function(bag) {
-        if (bag.srvID === srvBagID) {
-          card2ret = card;
-          return false;
-        }
-      });
-      if (card2ret) {
-        return false;
-      }
-    });
-    return card2ret;
-  }
-
-  function findBag(cards, srvBagID) {
-    var bag2ret = undefined;
-    _(cards).forEach(function(card) {
-      _(card.bags).forEach(function(bag) {
-        if (bag.srvID === srvBagID) {
-          bag2ret = bag;
-          return false;
-        }
-      });
-      if (bag2ret) {
-        return false;
-      }
-    });
-    return bag2ret;
   }
 
   $scope.$on('$destroy', function() {
