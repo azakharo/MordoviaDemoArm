@@ -24,9 +24,12 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, $q, myRest) {
                   event.timestamp = moment.unix(srvTrans.Timestamp).toDate();
                   event.card = findCardByBagID(cards, srvTrans.BagId);
                   event.operation = srvTrans.Type;
-                  event.currency = _.find(currencies, function (curr) {
-                    return curr.code === srvTrans.SourcePayload.CurrencyCode;
-                  });
+
+                  var bag = findBag(cards, srvTrans.BagId);
+                  if (bag) {
+                    event.currency = bag.currency;
+                  }
+
                   event.value = srvTrans.Value;
                   event.isSuccess = srvTrans.States[0].State === "Accepted";
 
@@ -106,6 +109,22 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, $q, myRest) {
       }
     });
     return card2ret;
+  }
+
+  function findBag(cards, srvBagID) {
+    var bag2ret = undefined;
+    _(cards).forEach(function(card) {
+      _(card.bags).forEach(function(bag) {
+        if (bag.srvID === srvBagID) {
+          bag2ret = bag;
+          return false;
+        }
+      });
+      if (bag2ret) {
+        return false;
+      }
+    });
+    return bag2ret;
   }
 
   $scope.$on('$destroy', function() {
