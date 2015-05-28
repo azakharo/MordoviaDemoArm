@@ -23,7 +23,7 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
             return curr.code === srvTrans.SourcePayload.CurrencyCode;
           });
           event.value = srvTrans.Value;
-          event.isSuccess = (srvTrans.States[0].State === "Accepted") ? true : false;
+          event.isSuccess = srvTrans.States[0].State === "Accepted";
 
           events.push(event);
           eventInd += 1;
