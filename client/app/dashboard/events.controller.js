@@ -2,38 +2,67 @@
 
 var mod = angular.module('demoarmApp');
 
-mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
-  //var stopAutoRefresh = null;
+mod.controller('EventsCtrl', function ($scope, $interval, $log, $q, myRest) {
+  var stopAutoRefresh = null;
   $scope.events = [];
 
-  myRest.getCurrencies().then(function(currencies){
-    //$scope.currencies = currencies;
-    myRest.getCards(currencies).then(function(cards){
-      myRest.getAllTransactions().then(function(srvTransactions){
-        var events = [];
-        var eventInd = 0;
-        srvTransactions.forEach(function (srvTrans) {
-          var event = {};
-          event.id = eventInd + 1;
-          event.srvTransactionID = srvTrans.Id;
-          event.timestamp = moment.unix(srvTrans.Timestamp).toDate();
-          event.card = findCardByBagID(cards, srvTrans.BagId);
-          event.operation = srvTrans.Type;
-          event.currency = _.find(currencies, function (curr) {
-            return curr.code === srvTrans.SourcePayload.CurrencyCode;
+  function getEvents() {
+    var deffered = $q.defer();
+    myRest.getCurrencies().then(
+      function (currencies) {
+        //$scope.currencies = currencies;
+        myRest.getCards(currencies).then(
+          function (cards) {
+            myRest.getAllTransactions().then(
+              function (srvTransactions) {
+                var events = [];
+                var eventInd = 0;
+                srvTransactions.forEach(function (srvTrans) {
+                  var event = {};
+                  event.id = eventInd + 1;
+                  event.srvTransactionID = srvTrans.Id;
+                  event.timestamp = moment.unix(srvTrans.Timestamp).toDate();
+                  event.card = findCardByBagID(cards, srvTrans.BagId);
+                  event.operation = srvTrans.Type;
+                  event.currency = _.find(currencies, function (curr) {
+                    return curr.code === srvTrans.SourcePayload.CurrencyCode;
+                  });
+                  event.value = srvTrans.Value;
+                  event.isSuccess = srvTrans.States[0].State === "Accepted";
+
+                  events.push(event);
+                  eventInd += 1;
+                });
+
+                deffered.resolve(events);
+              },
+              function (reason) {
+                deffered.reject(reason)
+              });
+          },
+          function (reason) {
+            deffered.reject(reason)
           });
-          event.value = srvTrans.Value;
-          event.isSuccess = srvTrans.States[0].State === "Accepted";
-
-          events.push(event);
-          eventInd += 1;
-        });
-
-        // Update the scope
-        $scope.events = events;
-        log("DONE");
+      },
+      function (reason) {
+        deffered.reject(reason)
       });
-    });
+    return deffered.promise;
+  }
+
+  getEvents().then(function (events) {
+    // Update the scope
+    $scope.events = events;
+
+    // Start auto update
+    stopAutoRefresh = $interval(function () {
+      getEvents().then(function(evts){
+        $scope.events = events;
+        log("DONE2");
+      });
+    }, 5000);
+
+    log("DONE");
   });
 
   function findCardByBagID(cards, srvBagID) {
@@ -51,24 +80,6 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
     });
     return card2ret;
   }
-
-  //function getEvents() {
-  //  //if (!authService.isLoggedIn()) { // if not logger in
-  //  //  return; // do nothing
-  //  //}
-  //
-  //  myRest.getEvents().then(
-  //    function (events) {
-  //      $scope.events = angular.copy(events);
-  //      // Start update
-  //      stopAutoRefresh = $interval(function () {
-  //        updateEvents();
-  //      }, 5000);
-  //    }
-  //  );
-  //};
-  //
-  //getEvents();
 
   //function updateEvents() {
   //  myRest.getEventsUpdate().then(
@@ -91,12 +102,12 @@ mod.controller('EventsCtrl', function ($scope, $interval, $log, myRest) {
   //    }
   //  );
   //}
-  //
-  //$scope.$on('$destroy', function() {
-  //  if (stopAutoRefresh) {
-  //    $interval.cancel(stopAutoRefresh);
-  //  }
-  //});
+
+  $scope.$on('$destroy', function() {
+    if (stopAutoRefresh) {
+      $interval.cancel(stopAutoRefresh);
+    }
+  });
 
   function log(msg) {
     $log.debug(msg);
