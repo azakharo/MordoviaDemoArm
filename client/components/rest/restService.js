@@ -212,6 +212,54 @@ mod.service(
       return bag2ret;
     }
 
+    function getEvents() {
+      var deffered = $q.defer();
+      getCurrencies().then(
+        function (currencies) {
+          //$scope.currencies = currencies;
+          getCards(currencies).then(
+            function (cards) {
+              getAllTransactions().then(
+                function (srvTransactions) {
+                  var events = [];
+                  var eventInd = 0;
+                  srvTransactions.forEach(function (srvTrans) {
+                    var event = {};
+                    event.id = eventInd + 1;
+                    event.srvTransactionID = srvTrans.Id;
+                    event.timestamp = moment.unix(srvTrans.Timestamp).toDate();
+                    event.card = findCardByBagID(cards, srvTrans.BagId);
+                    event.bag = findBag(cards, srvTrans.BagId);
+                    event.operation = srvTrans.Type;
+
+                    var bag = findBag(cards, srvTrans.BagId);
+                    if (bag) {
+                      event.currency = bag.currency;
+                    }
+
+                    event.value = srvTrans.Value;
+                    event.isSuccess = srvTrans.States[0].State === "Accepted";
+
+                    events.push(event);
+                    eventInd += 1;
+                  });
+
+                  deffered.resolve(events);
+                },
+                function (reason) {
+                  deffered.reject(reason)
+                });
+            },
+            function (reason) {
+              deffered.reject(reason)
+            });
+        },
+        function (reason) {
+          deffered.reject(reason)
+        });
+      return deffered.promise;
+    }
+
     // PUBLIC METHODS
     //=====================================================
 
@@ -264,7 +312,8 @@ mod.service(
       getCurrencies:    getCurrencies,
       getCards:         getCards,
       findCardByBagID:  findCardByBagID,
-      findBag:          findBag
+      findBag:          findBag,
+      getEvents:        getEvents
     });
   }
 );
