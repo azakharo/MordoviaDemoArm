@@ -116,9 +116,6 @@ mod.service(
                     return curr.srvID === srvBag.CurrencyId;
                   });
 
-                  // TODO Dummy balance
-                  bag.balance = 0;
-
                   //log('bag');
                   card.bags.push(bag);
                 });
@@ -260,6 +257,29 @@ mod.service(
       return deffered.promise;
     }
 
+    function calcBalance(cards, events) {
+      cards.forEach(function(card){
+        card.bags.forEach(function (bag) {
+          // Get events for the bag
+          var bagEvents = _.filter(events, function(evt) {
+            return evt.bag.srvID === bag.srvID;
+          });
+          // Calc balance
+          var balance = 0;
+          bagEvents.forEach(function(bagEvt){
+            if (bagEvt.operation === "replenishment") {
+              balance += bagEvt.value;
+            }
+            else if (bagEvt.operation === "payment") {
+              balance -= bagEvt.value;
+            }
+          });
+          // Set balance to the bag
+          bag.balance = balance;
+        })
+      });
+    }
+
     // PUBLIC METHODS
     //=====================================================
 
@@ -313,7 +333,8 @@ mod.service(
       getCards:         getCards,
       findCardByBagID:  findCardByBagID,
       findBag:          findBag,
-      getEvents:        getEvents
+      getEvents:        getEvents,
+      calcBalance:      calcBalance
     });
   }
 );
