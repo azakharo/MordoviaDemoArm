@@ -2,14 +2,14 @@
 
 var mod = angular.module('demoarmApp');
 
-mod.controller('FlowCtrl', function ($scope, $timeout, $log) {
+mod.controller('FlowCtrl', function ($scope, $timeout, $log, myRest) {
   Highcharts.setOptions({
     global: {
       useUTC: false
     }
   });
 
-  function drawChart() {
+  function drawChart(initialTurnover) {
     $('#flow-chart').highcharts({
       chart: {
         type: 'spline',
@@ -20,11 +20,12 @@ mod.controller('FlowCtrl', function ($scope, $timeout, $log) {
             // set up the updating of the chart each second
             var series = this.series[0];
             setInterval(function () {
-              var x = (new Date()).getTime(); // current time
-              passengerNextIter();
-              var y = passengerCount;
-              series.addPoint([x, y], true, true);
-            }, 1000);
+              myRest.getTurnover().then(function (turnover) {
+                var x = (new Date()).getTime(); // current time
+                var y = turnover;
+                series.addPoint([x, y], true, true);
+              });
+            }, 2000);
           }
         }
       },
@@ -72,8 +73,8 @@ mod.controller('FlowCtrl', function ($scope, $timeout, $log) {
 
           for (i = -19; i <= 0; i += 1) {
             data.push({
-              x: time + i * 1000,
-              y: 0
+              x: time + i * 2000,
+              y: initialTurnover
             });
           }
 
@@ -83,19 +84,12 @@ mod.controller('FlowCtrl', function ($scope, $timeout, $log) {
     });
   }
 
-  drawChart();
+  myRest.getTurnover().then(function (initialTurnover) {
+    drawChart(initialTurnover);
+  });
 
-  // WARKAROUND issue with chart width
-  //$timeout(function() {
-  //  $('#flow-chart').highcharts().reflow();
-  //}, 100);
-
-  // Simulate passengers
-  var passengerCount = 0;
-  function passengerNextIter() {
-    var randVal = Math.random();
-    if (randVal >= 0.75) {
-      passengerCount += 1;
-    }
+  function log(msg) {
+    $log.debug(msg);
   }
+
 });
