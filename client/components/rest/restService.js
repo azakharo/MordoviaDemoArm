@@ -53,6 +53,46 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function getAllTransactions() {
+      var transactions = [];
+      var deffered = $q.defer();
+
+      getAccounts().then(
+        function (srvAccounts) {
+          var accInd = 0;
+          srvAccounts.forEach(function (srvAcc) {
+            // Request transactions for the account
+            getAccountTransactions(srvAcc.Id).then(
+              function (srvTransactions) {
+                transactions = transactions.concat(srvTransactions);
+
+                // if last account, then resolve
+                if (accInd === srvAccounts.length - 1) {
+                  // sort by timestamp desc
+                  transactions = _.sortBy(transactions, function (trans) {
+                    return -trans.Timestamp;
+                  });
+
+                  //log('resolve');
+                  deffered.resolve(transactions);
+                }
+
+                accInd += 1;
+              });
+          });
+        },
+        function (reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+
+    //************************************************************************************
+    // Below are methods which return or work with app specific models (not server models)
+
     function getCurrencies() {
       var currencies = [];
       var deffered = $q.defer();
@@ -132,42 +172,6 @@ mod.service(
               });
           });
 
-        },
-        function (reason) {
-          deffered.reject(reason);
-        }
-      );
-
-      return deffered.promise;
-    }
-
-    function getAllTransactions() {
-      var transactions = [];
-      var deffered = $q.defer();
-
-      getAccounts().then(
-        function (srvAccounts) {
-          var accInd = 0;
-          srvAccounts.forEach(function (srvAcc) {
-            // Request transactions for the account
-            getAccountTransactions(srvAcc.Id).then(
-              function (srvTransactions) {
-                transactions = transactions.concat(srvTransactions);
-
-                // if last account, then resolve
-                if (accInd === srvAccounts.length - 1) {
-                  // sort by timestamp desc
-                  transactions = _.sortBy(transactions, function (trans) {
-                    return -trans.Timestamp;
-                  });
-
-                  //log('resolve');
-                  deffered.resolve(transactions);
-                }
-
-                accInd += 1;
-              });
-          });
         },
         function (reason) {
           deffered.reject(reason);
