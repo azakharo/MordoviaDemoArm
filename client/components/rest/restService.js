@@ -89,6 +89,29 @@ mod.service(
       return deffered.promise;
     }
 
+    function getOrgs() {
+      var request = $http({
+        method: "get",
+        url: baseURL + 'organizations'
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
+    function getOrgVehicles(orgID) {
+      var request = $http({
+        method: "get",
+        url: baseURL + format('organizations/{}/vehicles', orgID)
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
+    function getOrgVehicleTurnover(orgID, vehicleID) {
+      var request = $http({
+        method: "get",
+        url: baseURL + format('organizations/{}/vehicles/{}/turnovers', orgID, vehicleID)
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
 
     //************************************************************************************
     // Below are methods which return or work with app specific models (not server models)
@@ -284,6 +307,50 @@ mod.service(
       });
     }
 
+    // Returns int
+    function getTurnover() {
+      var turnover = undefined;
+      var deffered = $q.defer();
+
+      getOrgs().then(
+        function(orgs) {
+          if (orgs.length === 0) {
+            deffered.resolve(turnover);
+          }
+          var org = orgs[0];
+          getOrgVehicles(org.Id).then(
+            function(vehicles) {
+              if (vehicles.length === 0) {
+                deffered.resolve(turnover);
+              }
+              var vehicle = vehicles[0];
+              getOrgVehicleTurnover(org.Id, vehicle.Id).then(
+                function(srvTurnovers) {
+                  if (srvTurnovers.length === 0) {
+                    deffered.resolve(turnover);
+                  }
+                  // Get last and return quantity
+                  var lastSrvTurnover = srvTurnovers[srvTurnovers.length - 1];
+                  deffered.resolve(lastSrvTurnover.Quantity);
+                },
+                function(reason) {
+                  deffered.reject(reason);
+                }
+              );
+            },
+            function(reason) {
+              deffered.reject(reason);
+            }
+          );
+        },
+        function(reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
     // PUBLIC METHODS
     //=====================================================
 
@@ -338,7 +405,8 @@ mod.service(
       findCardByBagID:  findCardByBagID,
       findBag:          findBag,
       getEvents:        getEvents,
-      calcBalance:      calcBalance
+      calcBalance:      calcBalance,
+      getTurnover:      getTurnover
     });
   }
 );
