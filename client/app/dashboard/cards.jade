@@ -3,14 +3,16 @@ h2(style="text-align: center") Процессинг карт
   table.table.table-bordered.table-hover.table-condensed(style="background: white; margin-bottom: 0px")
     tbody(ng-repeat='card in cards')
       tr
-        th(colspan="4", style="color: blue") Карта {{ card.id }}
+        th(colspan="4")
+         span(style="color: blue; font-size: 1.3em") Карта {{ card.id }}
+         small(style="margin-left: 10px; color: darkslategrey;") RFID {{ card.RFID }}, активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
       tr
-        th.w20(style="padding-left: 30px;") Кошелек
-        th.w20.text-align-right Баланс
-        th.w20.text-align-right Начало действия
-        th.w20.text-align-right Конец действия
+        th.w25(style="padding-left: 30px;") Кошелек
+        th.w25.text-right Баланс
+        th.w25.text-right Начало действия
+        th.w25.text-right Конец действия
       tr(ng-repeat='bag in card.bags')
-        td.w20(style="padding-left: 30px;") {{ bag.currency.name }}
-        td.w20.text-align-right(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
-        td.w20.text-align-right {{ bag.activePeriodStart.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
-        td.w20.text-align-right {{ bag.activePeriodFinish.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+        td.w25(style="padding-left: 30px;") {{ bag.currency.name }}
+        td.w25.text-right(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
+        td.w25.text-right {{ bag.activePeriodStart.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+        td.w25.text-right {{ bag.activePeriodFinish.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}

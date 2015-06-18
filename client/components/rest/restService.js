@@ -37,6 +37,14 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function getAccountMedias(accountID) {
+      var request = $http({
+        method: "get",
+        url: baseURL + format('accounts/{}/medias', accountID)
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
     function getApps() {
       var request = $http({
         method: "get",
@@ -166,35 +174,50 @@ mod.service(
 
             // Request bags for the account
             card.bags = [];
-            getAccountBags(srvAcc.Id).then(
-              function (srvBags) {
-                srvBags.forEach(function (srvBag) {
-                  var bag = {};
-                  bag.srvID = srvBag.Id;
-                  bag.activePeriodStart = moment.unix(srvBag.TimeFrame.StartTimestamp);
-                  bag.activePeriodFinish = moment.unix(srvBag.TimeFrame.FinishTimestamp);
-
-                  // Get currency by its server id
-                  bag.currency = _.find(currencies, function (curr) {
-                    return curr.srvID === srvBag.CurrencyId;
+            getAccountMedias(srvAcc.Id).then(
+              function(medias) {
+                if (medias && medias.length > 0) {
+                  // Get 1st media
+                  // Get card RFID
+                  var media = medias[0];
+                  card.RFID = media.RFID;
+                  // Find card activation time
+                  var stateActivated = _(media.States).find(function(state) {
+                    return state.State === "Activated";
                   });
+                  if (stateActivated) {
+                    card.activatedAt = moment.unix(stateActivated.Timestamp);
+                  }
+                } // if media found
+                getAccountBags(srvAcc.Id).then(
+                  function (srvBags) {
+                    srvBags.forEach(function (srvBag) {
+                      var bag = {};
+                      bag.srvID = srvBag.Id;
+                      bag.activePeriodStart = moment.unix(srvBag.TimeFrame.StartTimestamp);
+                      bag.activePeriodFinish = moment.unix(srvBag.TimeFrame.FinishTimestamp);
 
-                  //log('bag');
-                  card.bags.push(bag);
-                });
+                      // Get currency by its server id
+                      bag.currency = _.find(currencies, function (curr) {
+                        return curr.srvID === srvBag.CurrencyId;
+                      });
 
-                newCards.push(card);
+                      //log('bag');
+                      card.bags.push(bag);
+                    });
 
-                // if last card, then resolve
-                if (accInd === srvAccounts.length - 1) {
-                  //log('resolve');
-                  deffered.resolve(newCards);
-                }
+                    newCards.push(card);
 
-                accInd += 1;
+                    // if last card, then resolve
+                    if (accInd === srvAccounts.length - 1) {
+                      //log('resolve');
+                      deffered.resolve(newCards);
+                    }
+
+                    accInd += 1;
+                  });
               });
           });
-
         },
         function (reason) {
           deffered.reject(reason);
