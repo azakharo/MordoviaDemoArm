@@ -20,13 +20,14 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log, myRest) {
         events: {
           load: function () {
             // set up the updating of the chart each second
-            var series = this.series[0];
+            var serie = this.series[0];
             setInterval(function () {
               myRest.getTurnover().then(function (turnover) {
                 if (turnover && turnover !== lastTurnover) {
                   var x = (new Date()).getTime(); // current time
                   var y = turnover;
-                  series.addPoint([x, y], true, true);
+                  var doShift = serie.data.length > 20;
+                  serie.addPoint([x, y], true, doShift);
 
                   lastTurnover = turnover;
                 }
