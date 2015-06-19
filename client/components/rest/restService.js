@@ -339,22 +339,75 @@ mod.service(
         function(orgs) {
           if (orgs.length === 0) {
             deffered.resolve(turnover);
+            return;
           }
           var org = orgs[0];
           getOrgVehicles(org.Id).then(
             function(vehicles) {
               if (vehicles.length === 0) {
                 deffered.resolve(turnover);
+                return;
               }
               var vehicle = vehicles[0];
               getOrgVehicleTurnover(org.Id, vehicle.Id).then(
                 function(srvTurnovers) {
                   if (srvTurnovers.length === 0) {
                     deffered.resolve(turnover);
+                    return;
                   }
                   // Get last and return quantity
                   var lastSrvTurnover = srvTurnovers[srvTurnovers.length - 1];
                   deffered.resolve(lastSrvTurnover.Quantity);
+                },
+                function(reason) {
+                  deffered.reject(reason);
+                }
+              );
+            },
+            function(reason) {
+              deffered.reject(reason);
+            }
+          );
+        },
+        function(reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    // Returns array: timestamp, value
+    function getTurnoverHistory() {
+      var hist = [];
+      var deffered = $q.defer();
+
+      getOrgs().then(
+        function(orgs) {
+          if (orgs.length === 0) {
+            deffered.resolve(hist);
+          }
+          var org = orgs[0];
+          getOrgVehicles(org.Id).then(
+            function(vehicles) {
+              if (vehicles.length === 0) {
+                deffered.resolve(hist);
+              }
+              var vehicle = vehicles[0];
+              getOrgVehicleTurnover(org.Id, vehicle.Id).then(
+                function(srvTurnovers) {
+                  if (srvTurnovers.length === 0) {
+                    deffered.resolve(hist);
+                  }
+
+                  // Get last and return quantity
+                  _(srvTurnovers).forEach(function(to) {
+                    var turno = {};
+                    turno.timestamp = moment.unix(to.Timestamp);
+                    turno.value = to.Quantity;
+                    hist.push(turno);
+                  });
+                  deffered.resolve(hist);
                 },
                 function(reason) {
                   deffered.reject(reason);
@@ -429,7 +482,8 @@ mod.service(
       findBag:          findBag,
       getEvents:        getEvents,
       calcBalance:      calcBalance,
-      getTurnover:      getTurnover
+      getTurnover:      getTurnover,
+      getTurnoverHistory: getTurnoverHistory
     });
   }
 );

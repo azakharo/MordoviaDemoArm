@@ -3,6 +3,7 @@
 var mod = angular.module('demoarmApp');
 
 mod.controller('TurnoverCtrl', function ($scope, $timeout, $log, myRest) {
+  var lastTurnover = -1;
 
   Highcharts.setOptions({
     global: {
@@ -10,7 +11,7 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log, myRest) {
     }
   });
 
-  function drawChart(initialTurnover) {
+  function drawChart(turnoverHist) {
     $('#chart').highcharts({
       chart: {
         type: 'line',
@@ -22,9 +23,13 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log, myRest) {
             var series = this.series[0];
             setInterval(function () {
               myRest.getTurnover().then(function (turnover) {
-                var x = (new Date()).getTime(); // current time
-                var y = turnover;
-                series.addPoint([x, y], true, true);
+                if (turnover !== lastTurnover) {
+                  var x = (new Date()).getTime(); // current time
+                  var y = turnover;
+                  series.addPoint([x, y], true, true);
+
+                  lastTurnover = turnover;
+                }
               });
             }, 2000);
           }
@@ -67,17 +72,23 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log, myRest) {
       series: [{
         name: 'passengers',
         data: (function () {
-          // generate an array of random data
-          var data = [],
-            time = (new Date()).getTime(),
-            i;
+          var data = [];
 
-          for (i = -19; i <= 0; i += 1) {
-            data.push({
-              x: time + i * 2000,
-              y: initialTurnover
-            });
+          // Leave only with unique timestamps
+          var hist = _.uniq(turnoverHist, 'timestamp');;
+
+          // Get only 20 latest
+          if (hist.length > 20) {
+            hist = hist.slice(hist.length - 20);
           }
+
+          // Create points to be drawn
+          _(hist).forEach(function(turno) {
+            data.push({
+              x: turno.timestamp.valueOf(),
+              y: turno.value
+            });
+          });
 
           return data;
         }()),
@@ -86,8 +97,11 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log, myRest) {
     });
   }
 
-  myRest.getTurnover().then(function (initialTurnover) {
-    drawChart(initialTurnover);
+  myRest.getTurnoverHistory().then(function (turnoverHist) {
+    drawChart(turnoverHist);
+    if (turnoverHist.length > 0) {
+      lastTurnover = turnoverHist[turnoverHist.length - 1].value;
+    }
   });
 
   function log(msg) {
