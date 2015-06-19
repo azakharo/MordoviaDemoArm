@@ -85,7 +85,7 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log, myRest) {
           // Create points to be drawn
           _(hist).forEach(function(turno) {
             data.push({
-              x: turno.timestamp.valueOf(),
+              x: turno.timestamp.toDate().getTime(),
               y: turno.value
             });
           });
