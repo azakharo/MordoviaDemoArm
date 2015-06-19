@@ -30,7 +30,7 @@ mod.controller('FlowCtrl', function ($scope, $timeout, $log, myRest) {
         }
       },
       title: {
-        text: 'Пассажиропоток',
+        text: '',
         style: {
           "fontSize": "30px"
         }
