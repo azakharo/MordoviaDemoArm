@@ -7,6 +7,8 @@ angular.module('demoarmApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
+  'formly',
+  'formlyBootstrap',
   'restService'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {

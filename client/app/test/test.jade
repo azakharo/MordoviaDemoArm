@@ -1,1 +1,4 @@
-p This is a test view
+form(novalidate='')
+  h1 Post turnover
+  formly-form(model='vm.rental', fields='vm.rentalFields', form='vm.rentalForm')
+   button.btn.btn-primary(type='submit', ng-disabled='vm.rentalForm.$invalid') Submit

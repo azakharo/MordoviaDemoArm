@@ -274,7 +274,7 @@ mod.service(
                     var event = {};
                     event.id = eventInd + 1;
                     event.srvTransactionID = srvTrans.Id;
-                    event.timestamp = moment.unix(srvTrans.Timestamp).toDate();
+                    event.timestamp = moment.unix(srvTrans.Timestamp);
                     event.card = findCardByBagID(cards, srvTrans.BagId);
                     event.bag = findBag(cards, srvTrans.BagId);
                     event.operation = srvTrans.Type;
@@ -466,6 +466,25 @@ mod.service(
     // PRIVATE METHODS
     //*************************************************************************
 
+    //--------------------------------------------------
+    // methods necessary only for the testing, debugging
+
+    function postTurnover(timestamp, value) {
+      var request = $http({
+        method: "post",
+        url: baseURL + 'organizations/55643625c98e560001000001/vehicles/5566ee65ffa2621d995c1e1a/turnovers',
+        data: [{
+          "Timestamp": timestamp.unix(),
+          "Distance": 1000,
+          "Quantity": value
+          }]
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
+    // methods necessary only for the testing, debugging
+    //--------------------------------------------------
+
     // Return public API
     return ({
       getAccounts:      getAccounts,
@@ -483,7 +502,9 @@ mod.service(
       getEvents:        getEvents,
       calcBalance:      calcBalance,
       getTurnover:      getTurnover,
-      getTurnoverHistory: getTurnoverHistory
+      getTurnoverHistory: getTurnoverHistory,
+      // methods necessary only for the testing, debugging
+      postTurnover: postTurnover
     });
   }
 );
