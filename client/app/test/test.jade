@@ -1,4 +1,5 @@
-form(novalidate='')
-  h1 Post turnover
-  formly-form(model='vm.rental', fields='vm.rentalFields', form='vm.rentalForm')
-   button.btn.btn-primary(type='submit', ng-disabled='vm.rentalForm.$invalid') Submit
+.container.col-md-4.col-md-offset-4
+  form(novalidate='')
+    h1 Post turnover
+    formly-form(model='userInput', fields='formFields', form='myForm')
+     button.btn.btn-primary(type='submit', ng-disabled='myForm.$invalid', ng-click="onBtnClick()") Post
