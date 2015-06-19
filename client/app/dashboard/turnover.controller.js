@@ -19,7 +19,7 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log, myRest) {
         marginRight: 10,
         events: {
           load: function () {
-            // set up the updating of the chart each second
+            // set up the updating of the chart periodically
             var serie = this.series[0];
             setInterval(function () {
               myRest.getTurnover().then(function (turnover) {
