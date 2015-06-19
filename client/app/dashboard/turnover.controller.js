@@ -37,7 +37,7 @@ mod.controller('TurnoverCtrl', function ($scope, $timeout, $log, myRest) {
         }
       },
       title: {
-        text: 'Пассажирооборот',
+        text: '',
         style: {
           "fontSize": "30px"
         }
