@@ -2,10 +2,12 @@ h2(style="text-align: center") Процессинг карт
 #table-wrapper(style="height: 290px; overflow-y: auto;")
   table.table.table-bordered.table-hover.table-condensed(style="background: white; margin-bottom: 0px")
     tbody(ng-repeat='card in cards')
-      tr
-        th(colspan="4")
-         span(style="color: blue; font-size: 1.3em") Карта {{ card.id }}
-         small(style="margin-left: 10px; color: darkslategrey;") RFID {{ card.RFID }}, активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+      tr.no-border
+       th.w25.no-border(style="color: blue; font-size: 110%") Карта {{ card.id }}
+       th.w25.no-border
+        small RFID {{ card.RFID }}
+       th.w25.no-border.text-right(colspan="2")
+        small активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
       tr
         th.w25(style="padding-left: 30px;") Кошелек
         th.w25.text-right Баланс
