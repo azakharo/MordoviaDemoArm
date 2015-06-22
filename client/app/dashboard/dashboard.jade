@@ -19,6 +19,11 @@
         .item
           .content(ui-view="flow")
 
+// Show server unavailable message, if necessary
+#msg-server-unavailable(ng-show='isRestUnavailable')
+  alert.text-center(type='danger') Сервер <b>http://cp-prod.corp.sarov-itc.ru</b> недоступен
+
+
 //*********************************************************
 // Flex experiment
 
