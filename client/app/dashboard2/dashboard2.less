@@ -1,0 +1,80 @@
+#wrapper {
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  display: -webkit-flex;
+
+  flex-flow: column nowrap;
+  -webkit-flex-flow: column nowrap;
+
+  align-items: stretch;
+  -webkit-align-items: stretch;
+
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+}
+
+#header {
+  flex: 0 0 1.5em;
+  width: 100%;
+  background: lightpink;
+}
+
+#content {
+  flex: 1;
+  width: 100%;
+  background: lightseagreen;
+
+  display: flex;
+  display: -webkit-flex;
+
+  flex-flow: row nowrap;
+  -webkit-flex-flow: row nowrap;
+
+  align-items: stretch;
+  -webkit-align-items: stretch;
+
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+}
+
+#left-part {
+  flex: 1;
+  background: lightgreen;
+}
+
+#right-part {
+  flex: 1;
+  background: red;
+
+  display: flex;
+  display: -webkit-flex;
+
+  flex-flow: column nowrap;
+  -webkit-flex-flow: column nowrap;
+
+  align-items: stretch;
+  -webkit-align-items: stretch;
+
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+}
+
+#right-up {
+  flex: 1;
+  width: 100%;
+  background: green;
+}
+
+#right-down {
+  flex: 1;
+  width: 100%;
+  background: blue;
+}
+
+#footer  {
+  flex: 0 0 1.5em;
+  width: 100%;
+  background: lightgoldenrodyellow;
+}
