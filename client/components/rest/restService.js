@@ -4,7 +4,7 @@ var mod = angular.module('restService', []);
 
 mod.service(
   "myRest",
-  function ($http, $q, $log, $rootScope, $interval) {
+  function ($http, $q, $log, $rootScope, $interval, $window) {
     var baseURL = 'http://cp-prod.corp.sarov-itc.ru/';
 
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:admin');
@@ -439,7 +439,13 @@ mod.service(
         $rootScope.isRestUnavailable = true;
       }
       else {
-        $rootScope.isRestUnavailable = false;
+        if ($rootScope.isRestUnavailable) {
+          $rootScope.isRestUnavailable = false;
+          $window.location.reload();
+        }
+        else {
+          $rootScope.isRestUnavailable = false;
+        }
       }
       // The API response from the server should be returned in a
       // normalized format. However, if the request was not handled by the
