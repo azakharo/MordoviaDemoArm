@@ -1,3 +1,6 @@
+//=========================================================
+// flexbox layout
+
 #wrapper {
   padding: 0;
   margin: 0;
@@ -82,3 +85,38 @@
   width: 100%;
   background: lightgoldenrodyellow;
 }
+
+// flexbox layout
+//=========================================================
+
+//******************************************
+// pie charts
+
+#pies-wrapper {
+  display: flex;
+  display: -webkit-flex;
+
+  flex-flow: row nowrap;
+  -webkit-flex-flow: row nowrap;
+
+  align-items: stretch;
+  -webkit-align-items: stretch;
+
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+
+  background: lightcoral;
+}
+
+#privileges-chart {
+  flex: 1;
+  background: orange;
+}
+
+#cards-chart {
+  flex: 1;
+  background: orangered;
+}
+
+// pie charts
+////******************************************

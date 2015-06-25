@@ -16,17 +16,9 @@ angular.module('demoarmApp')
             templateUrl: 'app/dashboard/cards.html',
             controller: 'CardsCtrl'
           },
-          'turnover': {
-            templateUrl: 'app/dashboard/turnover.html',
-            controller: 'TurnoverCtrl'
-          },
-          'events': {
-            templateUrl: 'app/dashboard/events.html',
-            controller: 'EventsCtrl'
-          },
-          'flow': {
-            templateUrl: 'app/dashboard/flow.html',
-            controller: 'FlowCtrl'
+          'pies': {
+            templateUrl: 'app/dashboard2/pies.html',
+            controller: 'PiesCtrl'
           }
         }
       });
