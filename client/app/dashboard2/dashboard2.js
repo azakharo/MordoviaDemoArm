@@ -19,6 +19,10 @@ angular.module('demoarmApp')
           'pies': {
             templateUrl: 'app/dashboard2/pies.html',
             controller: 'PiesCtrl'
+          },
+          'transactions': {
+            templateUrl: 'app/dashboard2/transactions.html',
+            controller: 'TransactionsCtrl'
           }
         }
       });
