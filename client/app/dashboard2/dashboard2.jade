@@ -10,3 +10,6 @@
       .right-down(ui-view="transactions")
   footer#footer.text-center Copyright &copy; 2015 &mdash;&nbsp;
     a(href="http://sarov-itc.ru/" target="_blank") ИТЦ Система-Саров
+  // Show server unavailable message, if necessary
+  #msg-server-unavailable(ng-show='isRestUnavailable')
+    alert.text-center(type='danger') Сервер <b>http://cp-prod.corp.sarov-itc.ru</b> недоступен
