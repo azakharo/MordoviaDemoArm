@@ -1,12 +1,12 @@
 #wrapper.vw100.vh100
-  #header.text-center.vcenter
+  #header.text-center
     a.left(href="http://sarov-itc.ru/" target="_blank")
      img(width="238" height="32" alt="Лого" src="assets/images/logo.png")
-    span Контрольная панель системы обработки ЕСЭК в Республике Мордовия
+    span#header-text Контрольная панель системы обработки ЕСЭК в Республике Мордовия
   #content
     #left-part(ui-view="cards")
     #right-part
       .right-up(ui-view="pies")
       .right-down(ui-view="transactions")
   footer#footer.text-center Copyright &copy; 2015 &mdash;&nbsp;
-    a(href="http://sarov-itc.ru/") ИТЦ Система-Саров
+    a(href="http://sarov-itc.ru/" target="_blank") ИТЦ Система-Саров
