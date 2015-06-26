@@ -1,6 +1,6 @@
 #cardproc-wrapper
   .section-title(style="margin-bottom: 5px;") Процессинг карт
-  .panel.panel-primary(ng-repeat='card in cards')
+  .panel(ng-repeat='card in cards', ng-class="getCardPanelClass(card.state)")
     .card-panel-heading.panel-heading
       .card-num Карта {{ card.id }}
       .card-rfid: small RFID {{ card.RFID }}

@@ -171,6 +171,8 @@ mod.service(
             var card = {};
             card.id = srvAcc.Number;
             card.srvAccountID = srvAcc.Id;
+            // TODO use real card state here
+            card.state = "success";
 
             // Request bags for the account
             card.bags = [];

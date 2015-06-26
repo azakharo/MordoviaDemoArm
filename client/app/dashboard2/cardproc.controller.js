@@ -65,6 +65,17 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
   function log(msg) {
     $log.debug(msg);
   }
+
+  var cardState2PanelCls = {
+    "success":  "panel-primary",
+    "warning":  "panel-warning",
+    "danger":   "panel-danger"
+  };
+
+  $scope.getCardPanelClass = function(cardState) {
+    return cardState2PanelCls[cardState];
+  };
+
 });
 
 //mod.filter('bagActivePeriodFilter', function () {
