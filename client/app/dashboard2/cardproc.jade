@@ -11,11 +11,11 @@
           tr
             th.w25.no-border(style="padding-left: 30px;") Кошелек
             th.w25.no-border.text-right Баланс
-            th.w25.no-border.text-right Начало действия
-            th.w25.no-border.text-right Конец действия
+            th.w25.no-border.text-right Период действия
+            th.w25.no-border.text-right Кол-во операций
           tr(ng-repeat='bag in card.bags')
             td.w25.no-border(style="padding-left: 30px;") {{ bag.currency.name }}
             td.w25.no-border.text-right(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
-            td.w25.no-border.text-right {{ bag.activePeriodStart.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
-            td.w25.no-border.text-right {{ bag.activePeriodFinish.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+            td.w25.no-border.text-right {{ bag | bagActivePeriodFilter }}
+            td.w25.no-border.text-right 0
     .panel-footer HA-HA-HA

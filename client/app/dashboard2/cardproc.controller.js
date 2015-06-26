@@ -78,17 +78,17 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
 
 });
 
-//mod.filter('bagActivePeriodFilter', function () {
-//  return function (bag) {
-//    var start = "";
-//    var finish = "";
-//    var dateFrmt = 'DD.MM.YYYY';
-//    if (bag.activePeriodStart) {
-//      start = bag.activePeriodStart.format(dateFrmt);
-//    }
-//    if (bag.activePeriodFinish) {
-//      finish = bag.activePeriodFinish.format(dateFrmt);
-//    }
-//    return format("{} - {}", start, finish);
-//  };
-//});
+mod.filter('bagActivePeriodFilter', function () {
+  return function (bag) {
+    var start = "";
+    var finish = "";
+    var dateFrmt = 'DD.MM.YYYY';
+    if (bag.activePeriodStart) {
+      start = bag.activePeriodStart.format(dateFrmt);
+    }
+    if (bag.activePeriodFinish) {
+      finish = bag.activePeriodFinish.format(dateFrmt);
+    }
+    return format("{} - {}", start, finish);
+  };
+});
