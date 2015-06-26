@@ -1,21 +1,21 @@
 #cardproc-wrapper
-  .section-title Процессинг карт
-  #table-wrapper(style="height: 290px; overflow-y: auto; margin-top: 5px;")
-    table.table.table-bordered.table-hover.table-condensed(style="background: white; margin-bottom: 0px")
-      tbody(ng-repeat='card in cards')
-        tr.no-border
-         th.w25.no-border(style="color: blue; font-size: 110%") Карта {{ card.id }}
-         th.w25.no-border
-          small RFID {{ card.RFID }}
-         th.w25.no-border.text-right(colspan="2")
-          small активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
-        tr
-          th.w25(style="padding-left: 30px;") Кошелек
-          th.w25.text-right Баланс
-          th.w25.text-right Начало действия
-          th.w25.text-right Конец действия
-        tr(ng-repeat='bag in card.bags')
-          td.w25(style="padding-left: 30px;") {{ bag.currency.name }}
-          td.w25.text-right(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
-          td.w25.text-right {{ bag.activePeriodStart.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
-          td.w25.text-right {{ bag.activePeriodFinish.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+  .section-title(style="margin-bottom: 5px;") Процессинг карт
+  .panel.panel-primary(ng-repeat='card in cards')
+    .panel-heading
+      span Карта {{ card.id }}
+      small RFID {{ card.RFID }}
+      small активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+    .panel-body
+      table.table.table-bordered.table-hover.table-condensed.no-border(style="background: white; margin-bottom: 0px")
+        tbody
+          tr
+            th.w25.no-border(style="padding-left: 30px;") Кошелек
+            th.w25.no-border.text-right Баланс
+            th.w25.no-border.text-right Начало действия
+            th.w25.no-border.text-right Конец действия
+          tr(ng-repeat='bag in card.bags')
+            td.w25.no-border(style="padding-left: 30px;") {{ bag.currency.name }}
+            td.w25.no-border.text-right(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
+            td.w25.no-border.text-right {{ bag.activePeriodStart.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+            td.w25.no-border.text-right {{ bag.activePeriodFinish.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+    .panel-footer HA-HA-HA
