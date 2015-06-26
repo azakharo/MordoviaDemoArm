@@ -127,6 +127,35 @@
   width: 100%;
 }
 
+/* Medium screens */
+@media screen and (max-width: 801px) and (orientation: portrait) {
+  #header, #footer {
+    display: none;
+  }
+
+  #content {
+    flex-flow: column nowrap;
+    -webkit-flex-flow: column nowrap;
+
+    max-width: 640px;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 1201px) and (orientation: landscape) {
+  #header, #footer {
+    display: none;
+  }
+
+  #content {
+    flex-flow: column nowrap;
+    -webkit-flex-flow: column nowrap;
+
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
 // flexbox layout
 //=========================================================
 
