@@ -1,10 +1,10 @@
 #cardproc-wrapper
   .section-title(style="margin-bottom: 5px;") Процессинг карт
   .panel.panel-primary(ng-repeat='card in cards')
-    .panel-heading
-      span Карта {{ card.id }}
-      small RFID {{ card.RFID }}
-      small активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+    .card-panel-heading.panel-heading
+      .card-num Карта {{ card.id }}
+      .card-rfid: small RFID {{ card.RFID }}
+      .card-activation-time: small активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
     .panel-body
       table.table.table-bordered.table-hover.table-condensed.no-border(style="background: white; margin-bottom: 0px")
         tbody
