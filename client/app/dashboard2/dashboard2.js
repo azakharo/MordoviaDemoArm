@@ -12,9 +12,9 @@ angular.module('demoarmApp')
       .state('dashboard2.ready', {
         url: '/preview',
         views: {
-          'cards': {
-            templateUrl: 'app/dashboard/cards.html',
-            controller: 'CardsCtrl'
+          'cardproc': {
+            templateUrl: 'app/dashboard2/cardproc.html',
+            controller: 'CardProcCtrl'
           },
           'pies': {
             templateUrl: 'app/dashboard2/pies.html',
