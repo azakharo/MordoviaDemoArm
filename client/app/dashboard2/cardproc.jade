@@ -18,4 +18,11 @@
             td.w25.no-border.text-right(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
             td.w25.no-border.text-right {{ bag | bagActivePeriodFilter }}
             td.w25.no-border.text-right {{ bag.transCount }}
-    .panel-footer {{ card.latestTrans | cardLatestTransFilter }}
+    .card-panel-footer.panel-footer
+      .trans-status
+        span.fa.fa-check-circle(style="color: green", ng-if="card.latestTrans.isSuccess")
+        span.fa.fa-minus-circle(style="color: red", ng-if="!card.latestTrans.isSuccess")
+      .trans-dt {{ card.latestTrans.timestamp.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+      .trans-curr {{ card.latestTrans.currency.name | lowercase }}
+      .trans-oper {{ card.latestTrans.operation | eventOperationFilter }}
+      .trans-val {{ card.latestTrans.value }}

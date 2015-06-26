@@ -95,8 +95,14 @@ mod.filter('bagActivePeriodFilter', function () {
   };
 });
 
-mod.filter('cardLatestTransFilter', function () {
-  return function (trans) {
-    return "aaa";
-  };
-});
+//mod.filter('cardLatestTransFilter', function () {
+//  return function (trans) {
+//    var s = "";
+//    if (trans) {
+//      var dtFrmt = 'DD.MM.YYYY HH:mm:ss';
+//      var dt = trans.timestamp.format(dtFrmt);
+//      s = format('{} | {} | {} | {}', dt, trans.currency.name, "oper", trans.value);
+//    }
+//    return s;
+//  };
+//});
