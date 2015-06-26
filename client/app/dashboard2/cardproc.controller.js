@@ -13,6 +13,7 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
       // Calc bag balances
       myRest.getEvents().then(function(events) {
         myRest.calcBalance($scope.cards, events);
+        myRest.calcTransactions($scope.cards, events);
       });
     });
   });
@@ -24,8 +25,9 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
         // Calc bag balances
         myRest.getEvents().then(function(events) {
           myRest.calcBalance(cards, events);
+          myRest.calcTransactions(cards, events);
 
-          // Find the bags which have been changed
+          // Find the bags which have been changed, and animate the change
           var cardsCopy = angular.copy(cards);
           if ($scope.cards.length > 0) {
             // TODO Assumed that only bag balances are changed
@@ -90,5 +92,11 @@ mod.filter('bagActivePeriodFilter', function () {
       finish = bag.activePeriodFinish.format(dateFrmt);
     }
     return format("{} - {}", start, finish);
+  };
+});
+
+mod.filter('cardLatestTransFilter', function () {
+  return function (trans) {
+    return "aaa";
   };
 });

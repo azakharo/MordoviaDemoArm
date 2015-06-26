@@ -17,5 +17,5 @@
             td.w25.no-border(style="padding-left: 30px;") {{ bag.currency.name }}
             td.w25.no-border.text-right(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
             td.w25.no-border.text-right {{ bag | bagActivePeriodFilter }}
-            td.w25.no-border.text-right 0
-    .panel-footer HA-HA-HA
+            td.w25.no-border.text-right {{ bag.transCount }}
+    .panel-footer {{ card.latestTrans | cardLatestTransFilter }}

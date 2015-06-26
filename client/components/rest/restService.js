@@ -332,6 +332,48 @@ mod.service(
       });
     }
 
+    // For every card bag find total transaction count AND
+    // for every card find latest transaction
+    function calcTransactions(cards, events) {
+      cards.forEach(function(card){
+        card.bags.forEach(function (bag) {
+          /* For every card bag find total transaction count */
+          // Get events for the bag
+          var bagTrans = _.filter(events, function (evt) {
+            return evt.bag.srvID === bag.srvID;
+          });
+
+          // Set bag transaction count
+          if (bagTrans && bagTrans.length > 0) {
+            bag.transCount = bagTrans.length;
+          }
+          else {
+            bag.transCount = 0;
+          }
+        });
+
+
+        /* For every card find latest transaction */
+
+        // Get events for the card
+        var cardTrans = _.filter(events, function (evt) {
+          return evt.card.srvAccountID === card.srvAccountID;
+        });
+
+        // Sort by timestamp descending
+        // Already sorted
+
+        // Get 1st
+        // Set card latest transaction
+        if (cardTrans && cardTrans.length > 0) {
+          card.latestTrans = cardTrans[0];
+        }
+        else {
+          card.latestTrans = undefined;
+        }
+      });
+    }
+
     // Returns int
     function getTurnover() {
       var turnover = undefined;
@@ -509,6 +551,7 @@ mod.service(
       findBag:          findBag,
       getEvents:        getEvents,
       calcBalance:      calcBalance,
+      calcTransactions: calcTransactions,
       getTurnover:      getTurnover,
       getTurnoverHistory: getTurnoverHistory,
       // methods necessary only for the testing, debugging
