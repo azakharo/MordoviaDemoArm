@@ -21,6 +21,7 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
           return angular.copy(firstCard);
         });
         $scope.cards = $scope.cards.concat(copies);
+
       });
     });
   });

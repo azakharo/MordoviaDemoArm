@@ -1,28 +1,29 @@
 #cardproc-wrapper
   .section-title(style="margin-bottom: 5px;") Процессинг карт
-  .panel(ng-repeat='card in cards', ng-class="getCardPanelClass(card.state)")
-    .card-panel-heading.panel-heading
-      .card-num Карта {{ card.id }}
-      .card-rfid: small RFID {{ card.RFID }}
-      .card-activation-time: small активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
-    .panel-body
-      table.table.table-bordered.table-hover.table-condensed.no-border(style="background: white; margin-bottom: 0px")
-        tbody
-          tr
-            th.w25.no-border(style="padding-left: 30px;") Кошелек
-            th.w25.no-border.text-right Баланс
-            th.w25.no-border.text-right Период действия
-            th.w25.no-border.text-right Кол-во операций
-          tr(ng-repeat='bag in card.bags')
-            td.w25.no-border(style="padding-left: 30px;") {{ bag.currency.name }}
-            td.w25.no-border.text-right(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
-            td.w25.no-border.text-right {{ bag | bagActivePeriodFilter }}
-            td.w25.no-border.text-right {{ bag.transCount }}
-    .card-panel-footer.panel-footer
-      .trans-status
-        span.fa.fa-check-circle(style="color: green", ng-if="card.latestTrans.isSuccess")
-        span.fa.fa-minus-circle(style="color: red", ng-if="!card.latestTrans.isSuccess")
-      .trans-dt {{ card.latestTrans.timestamp.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
-      .trans-curr {{ card.latestTrans.currency.name | lowercase }}
-      .trans-oper {{ card.latestTrans.operation | eventOperationFilter }}
-      .trans-val {{ card.latestTrans.value }}
+  #card-panels-container
+    .panel(ng-repeat='card in cards', ng-class="getCardPanelClass(card.state)")
+      .card-panel-heading.panel-heading
+        .card-num Карта {{ card.id }}
+        .card-rfid: small RFID {{ card.RFID }}
+        .card-activation-time: small активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+      .panel-body
+        table.table.table-bordered.table-hover.table-condensed.no-border(style="background: white; margin-bottom: 0px")
+          tbody
+            tr
+              th.w25.no-border(style="padding-left: 30px;") Кошелек
+              th.w25.no-border.text-right Баланс
+              th.w25.no-border.text-right Период действия
+              th.w25.no-border.text-right Кол-во операций
+            tr(ng-repeat='bag in card.bags')
+              td.w25.no-border(style="padding-left: 30px;") {{ bag.currency.name }}
+              td.w25.no-border.text-right(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }") {{ bag.balance }}
+              td.w25.no-border.text-right {{ bag | bagActivePeriodFilter }}
+              td.w25.no-border.text-right {{ bag.transCount }}
+      .card-panel-footer.panel-footer
+        .trans-status
+          span.fa.fa-check-circle(style="color: green", ng-if="card.latestTrans.isSuccess")
+          span.fa.fa-minus-circle(style="color: red", ng-if="!card.latestTrans.isSuccess")
+        .trans-dt {{ card.latestTrans.timestamp.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
+        .trans-curr {{ card.latestTrans.currency.name | lowercase }}
+        .trans-oper {{ card.latestTrans.operation | eventOperationFilter }}
+        .trans-val {{ card.latestTrans.value }}
