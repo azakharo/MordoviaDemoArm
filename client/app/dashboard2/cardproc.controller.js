@@ -14,6 +14,13 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
       myRest.getEvents().then(function(events) {
         myRest.calcBalance($scope.cards, events);
         myRest.calcTransactions($scope.cards, events);
+
+
+        var firstCard = $scope.cards[0];
+        var copies = _.times(9, function(ind) {
+          return angular.copy(firstCard);
+        });
+        $scope.cards = $scope.cards.concat(copies);
       });
     });
   });
@@ -26,6 +33,14 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
         myRest.getEvents().then(function(events) {
           myRest.calcBalance(cards, events);
           myRest.calcTransactions(cards, events);
+
+
+          var firstCard = cards[0];
+          var copies = _.times(9, function(ind) {
+            return angular.copy(firstCard);
+          });
+          cards = cards.concat(copies);
+
 
           // Find the bags which have been changed, and animate the change
           var cardsCopy = angular.copy(cards);
