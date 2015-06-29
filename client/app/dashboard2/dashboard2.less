@@ -127,6 +127,8 @@
 /* Medium screens */
 @media screen and (max-width: 801px) and (orientation: portrait),
   screen and (max-width: 1201px) and (orientation: landscape) {
+
+  // disp sections vertically, one after another
   #wrapper, #content, #left-part, #right-part,
   .right-up, .right-down, #footer, #pies-wrapper, #privileges-chart, #cards-chart {
     display: block !important;
@@ -142,6 +144,11 @@
   }
   #header-logo, #header-right-part {
     display: none;
+  }
+
+  // card proc - no vert scrollbar
+  #card-panels-container {
+    height: fit-content !important;
   }
 }
 
