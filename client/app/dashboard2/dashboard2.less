@@ -148,7 +148,8 @@
 
   // card proc - no vert scrollbar
   #card-panels-container {
-    height: fit-content !important;
+    height: inherit;
+    overflow: inherit;
   }
 }
 
@@ -204,9 +205,12 @@
   padding: 10px 5px 0px 5px;
 }
 
-#card-panels-container {
-  height: 85vh;
-  overflow: auto;
+@media screen and (min-width: 801px) and (orientation: portrait),
+screen and (min-width: 1201px) and (orientation: landscape) {
+  #card-panels-container {
+    height: 85vh;
+    overflow: auto;
+  }
 }
 
 .card-panel-heading {
