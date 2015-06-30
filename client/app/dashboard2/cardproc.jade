@@ -5,7 +5,7 @@
     ng-class="{ animated: card.justChanged && cards.length > 1, fadeInUp: card.justChanged && cards.length > 1 }")
       .panel(ng-class="getCardPanelClass(card.state)")
         .card-panel-heading.panel-heading
-          .card-num Карта {{ card.id }}
+          .card-num {{ card | cardTitleFilter }}
           .card-rfid: small RFID {{ card.RFID }}
           .card-activation-time: small активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
         .panel-body

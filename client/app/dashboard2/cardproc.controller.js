@@ -136,3 +136,14 @@ mod.filter('bagActivePeriodFilter', function () {
 //    return s;
 //  };
 //});
+
+mod.filter('cardTitleFilter', function () {
+  return function (card) {
+    // UID: 1234567890 (ЕСЭК)
+    var s = format('UID: {}', card.id);
+    if (card.isESEK) {
+      s += " (ЕСЭК)"
+    }
+    return s;
+  };
+});

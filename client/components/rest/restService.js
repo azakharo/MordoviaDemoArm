@@ -174,6 +174,8 @@ mod.service(
             // TODO use real card state here
             card.state = "success";
 
+            card.isESEK = srvAcc.UserId !== "000000000000000000000000";
+
             // Request bags for the account
             card.bags = [];
             getAccountMedias(srvAcc.Id).then(
