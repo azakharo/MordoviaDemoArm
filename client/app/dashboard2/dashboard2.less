@@ -92,7 +92,7 @@
 
 #right-part {
   flex: 1;
-  background: red;
+//  background: red;
 
   display: flex;
   display: -webkit-flex;
@@ -110,7 +110,8 @@
 .right-up {
   flex: 1 1 450px;
   width: 100%;
-  background: green;
+//  background: green;
+  padding: 10px 5px 0px 5px;
 }
 
 .right-down {
@@ -272,5 +273,43 @@ screen and (min-width: 1201px) and (orientation: landscape) {
 .section-title {
   font-size: x-large;
   white-space: nowrap;
-  .text-center
+  .text-center;
+  margin-bottom: 5px;
 }
+
+//*********************************************************
+// pies section
+
+#pies-header {
+  display: flex;
+  display: -webkit-flex;
+
+  flex-flow: row wrap;
+  -webkit-flex-flow: row wrap;
+
+  align-items: center;
+  -webkit-align-items: center;
+
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+
+  margin-bottom: 5px;
+}
+
+#pies-title {
+  flex: auto;
+  font-size: x-large;
+  white-space: nowrap;
+//  background: yellow;
+//  padding-left: 20px;
+  .text-center;
+}
+
+#pies-period-buttons {
+  flex: auto;
+//  background: yellowgreen;
+  .text-right;
+}
+
+// pies section
+//*********************************************************

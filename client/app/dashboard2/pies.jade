@@ -1,5 +1,12 @@
-#pies-title Распределение по видам льгот и типам карт
-#pies-period-buttons Кнопки
+#pies-header
+  #pies-title Распределение по видам льгот и типам карт
+  #pies-period-buttons
+    //pre {{ timePeriod || 'undefined'}}
+    .btn-group
+      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'day'") День
+      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'week'") Неделя
+      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'month'") Месяц
+      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'year'") Год
 #pies-wrapper
   #privileges-chart
   #cards-chart
