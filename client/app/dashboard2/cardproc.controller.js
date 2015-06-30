@@ -18,9 +18,17 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
 
         var firstCard = $scope.cards[0];
         var copies = _.times(9, function(ind) {
-          return angular.copy(firstCard);
+          var copy = angular.copy(firstCard);
+          copy.id += ind + 1;
+          copy.latestTrans.timestamp.add(ind + 1, 'minutes');;
+          return copy;
         });
         $scope.cards = $scope.cards.concat(copies);
+
+        // Sort cards by latest trans time desc
+        $scope.cards = _.sortBy($scope.cards, function(card) {
+          return -card.latestTrans.timestamp;
+        });
 
       });
     });
@@ -38,9 +46,17 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
 
           var firstCard = cards[0];
           var copies = _.times(9, function(ind) {
-            return angular.copy(firstCard);
+            var copy = angular.copy(firstCard);
+            copy.id += ind + 1;
+            copy.latestTrans.timestamp.add(ind + 1, 'minutes');;
+            return copy;
           });
           cards = cards.concat(copies);
+
+          // Sort cards by latest trans time desc
+          cards = _.sortBy(cards, function(card) {
+            return -card.latestTrans.timestamp;
+          });
 
 
           // Find the bags which have been changed, and animate the change

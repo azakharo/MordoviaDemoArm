@@ -169,7 +169,7 @@ mod.service(
           var accInd = 0;
           srvAccounts.forEach(function (srvAcc) {
             var card = {};
-            card.id = srvAcc.Number;
+            card.id = +srvAcc.Number;
             card.srvAccountID = srvAcc.Id;
             // TODO use real card state here
             card.state = "success";
