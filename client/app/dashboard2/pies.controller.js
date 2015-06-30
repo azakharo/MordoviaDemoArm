@@ -4,6 +4,7 @@ var mod = angular.module('demoarmApp');
 
 mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
   $scope.timePeriod = 'year';
+
   var privileges = [
     ['Нет льгот', 20],
     ['Пенсионеры', 50],
@@ -50,6 +51,12 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
     });
   }
 
+  var cards = [
+    ['ЕСЭК', 10],
+    ['Электронный билет', 20],
+    ['Обычный билет', 70]
+  ];
+
   function drawCardsChart() {
     $('#cards-chart').highcharts({
       chart: {
@@ -66,38 +73,31 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
         enabled: false
       },
       tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        headerFormat: '',
+        pointFormat: '{point.name}: <b>{point.y: .0f}</b>'
       },
       plotOptions: {
         pie: {
           allowPointSelect: true,
           cursor: 'pointer',
           dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-            style: {
-              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-            }
-          }
+            enabled: false
+            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            //style: {
+            //  color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            //}
+          },
+          showInLegend: true
         }
       },
       series: [{
         type: 'pie',
-        name: 'Browser share',
-        data: [
-          ['Firefox',   45.0],
-          ['IE',       26.8],
-          {
-            name: 'Chrome',
-            y: 12.8,
-            sliced: true,
-            selected: true
-          },
-          ['Safari',    8.5],
-          ['Opera',     6.2],
-          ['Others',   0.7]
-        ]
-      }]
+        name: 'cards',
+        data: cards
+      }],
+      legend: {
+        labelFormat: '<b>{name}</b>: {percentage:.1f} %'
+      }
     });
   }
 
