@@ -78,3 +78,68 @@
 .no-border {
   border: none !important;
 }
+
+//*********************************************************
+// Table change animation
+
+// From one BG to another animation
+.new-event  {
+  -webkit-animation:4s my_animation;
+  -moz-animation:4s my_animation;
+  -o-animation:4s my_animation;
+  animation:4s my_animation;
+}
+
+@keyframes my_animation {
+  from { background: #dff0d8; }
+  to { background: white; }
+}
+
+/*
+  Unfortunately each browser vendor requires
+  its own definition of keyframe animation code...
+*/
+@-webkit-keyframes my_animation {
+  from { background: #dff0d8; }
+  to { background: white; }
+}
+
+@-moz-keyframes my_animation {
+  from { background: #dff0d8; }
+  to { background: white; }
+}
+
+@-o-keyframes my_animation {
+  from { background: #dff0d8; }
+  to { background: white; }
+}
+
+// BUBBLE animation
+//.bubble {
+//  color: red;
+//  font-size: larger;
+//  font-weight: bold;
+//  animation:pulse 1s 3;
+//  -webkit-animation:pulse 1s 3;
+//}
+//
+//@keyframes pulse {
+//  0%      { transform:scale(1); }
+//  25%     { transform:scale(2); }
+//  75%     { transform:scale(1); }
+//}
+//@-webkit-keyframes pulse {
+//  0%      { -webkit-transform:scale(1); }
+//  25%     { -webkit-transform:scale(2); }
+//  75%     { -webkit-transform:scale(1); }
+//}
+
+.table-cell-changed {
+  //  color: red;
+  //  font-size: larger;
+  font-weight: bold;
+  //  background: lightpink;
+}
+
+// Table change animation
+//*********************************************************
