@@ -8,28 +8,27 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
   myRest.getCurrencies().then(function(currencies){
     //$scope.currencies = currencies;
     myRest.getCards(currencies).then(function(newCards){
-      // Update the scope
-      $scope.cards = newCards;
       // Calc bag balances
       myRest.getEvents().then(function(events) {
-        myRest.calcBalance($scope.cards, events);
-        myRest.calcTransactions($scope.cards, events);
+        myRest.calcBalance(newCards, events);
+        myRest.calcTransactions(newCards, events);
 
-
-        var firstCard = $scope.cards[0];
-        var copies = _.times(9, function(ind) {
-          var copy = angular.copy(firstCard);
-          copy.id += ind + 1;
-          copy.latestTrans.timestamp.add(ind + 1, 'minutes');;
-          return copy;
-        });
-        $scope.cards = $scope.cards.concat(copies);
+        //var firstCard = newCards[0];
+        //var copies = _.times(9, function(ind) {
+        //  var copy = angular.copy(firstCard);
+        //  copy.id += ind + 1;
+        //  copy.latestTrans.timestamp.add(ind + 1, 'minutes');
+        //  return copy;
+        //});
+        //newCards = newCards.concat(copies);
 
         // Sort cards by latest trans time desc
-        $scope.cards = _.sortBy($scope.cards, function(card) {
+        newCards = _.sortBy(newCards, function(card) {
           return -card.latestTrans.timestamp;
         });
 
+        // Update the scope
+        $scope.cards = newCards;
       });
     });
   });
@@ -43,21 +42,19 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
           myRest.calcBalance(cards, events);
           myRest.calcTransactions(cards, events);
 
-
-          var firstCard = cards[0];
-          var copies = _.times(9, function(ind) {
-            var copy = angular.copy(firstCard);
-            copy.id += ind + 1;
-            copy.latestTrans.timestamp.add(ind + 1, 'minutes');;
-            return copy;
-          });
-          cards = cards.concat(copies);
+          //var firstCard = cards[0];
+          //var copies = _.times(9, function(ind) {
+          //  var copy = angular.copy(firstCard);
+          //  copy.id += ind + 1;
+          //  copy.latestTrans.timestamp.add(ind + 1, 'minutes');
+          //  return copy;
+          //});
+          //cards = cards.concat(copies);
 
           // Sort cards by latest trans time desc
           cards = _.sortBy(cards, function(card) {
             return -card.latestTrans.timestamp;
           });
-
 
           // Find the bags which have been changed, and animate the change
           var cardsCopy = angular.copy(cards);
@@ -77,6 +74,7 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
                   //log("card '" + oldCard.id + "', bag '" + oldBag.name + "': balance changed from " + oldBag.balance + " to " + newBag.balance);
                   //log(format("card '{}', bag '{}': balance changed from {} to {}!", oldCard.id, oldBag.name, oldBag.balance, newBag.balance));
                   newBag.wasUpdated = true;
+                  newCard.justChanged = true;
                 }
                 else {
                   newBag.wasUpdated = false;
