@@ -10,16 +10,32 @@ mod.controller('TestCtrl', function ($scope, $log, myRest) {
       key: 'turnover',
       type: 'input',
       templateOptions: {
-        type: 'text',
+        type: 'number',
         label: 'New turnover value',
         placeholder: 'Enter integer',
-        required: true
+        required: false
+      }
+    },
+    {
+      key: 'balanceAdd',
+      type: 'input',
+      templateOptions: {
+        type: 'number',
+        label: 'Balance Addition',
+        placeholder: 'Enter positive integer',
+        required: false
       }
     }
   ];
 
-  $scope.onBtnClick = function() {
-    myRest.postTurnover(moment(), +$scope.userInput.turnover);
+  $scope.onPostTurnoverBtnClick = function() {
+    myRest.postTurnover(moment(), $scope.userInput.turnover);
+    $scope.userInput.turnover = undefined;
+  };
+
+  $scope.onReplenishBalanceBtnClick = function() {
+    myRest.replenishBalance(moment(), $scope.userInput.balanceAdd);
+    $scope.userInput.balanceAdd = undefined;
   };
 
 });

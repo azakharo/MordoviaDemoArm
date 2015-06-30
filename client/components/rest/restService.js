@@ -532,6 +532,20 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function replenishBalance(timestamp, value) {
+      var request = $http({
+        method: "post",
+        url: baseURL + 'replenishment',
+        data: {
+          "CurrencyCode": "TR-BL",
+          "RFID": "1111-2222-3333-4444",
+          "Timestamp": timestamp.unix(),
+          "Value": value
+        }
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
     // methods necessary only for the testing, debugging
     //--------------------------------------------------
 
@@ -555,7 +569,8 @@ mod.service(
       getTurnover:      getTurnover,
       getTurnoverHistory: getTurnoverHistory,
       // methods necessary only for the testing, debugging
-      postTurnover: postTurnover
+      postTurnover: postTurnover,
+      replenishBalance: replenishBalance
     });
   }
 );
