@@ -3,16 +3,22 @@
 var mod = angular.module('demoarmApp');
 
 mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
+  $scope.timePeriod = 'year';
 
   function drawPrivilegesChart() {
     $('#privileges-chart').highcharts({
       chart: {
+        backgroundColor: '#20B2AA',
         plotBackgroundColor: null,
         plotBorderWidth: null,
-        plotShadow: false
+        plotShadow: false,
+        marginTop: 0
       },
       title: {
-        text: 'Browser market shares at a specific website, 2014'
+        text: null
+      },
+      exporting: {
+        enabled: false
       },
       tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -53,12 +59,17 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
   function drawCardsChart() {
     $('#cards-chart').highcharts({
       chart: {
+        backgroundColor: '#20B2AA',
         plotBackgroundColor: null,
         plotBorderWidth: null,
-        plotShadow: false
+        plotShadow: false,
+        marginTop: 0
       },
       title: {
-        text: 'Browser market shares at a specific website, 2014'
+        text: null
+      },
+      exporting: {
+        enabled: false
       },
       tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
