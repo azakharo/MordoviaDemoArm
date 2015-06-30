@@ -40,4 +40,8 @@ mod.controller('TestCtrl', function ($scope, $log, myRest) {
     $scope.userInput.balanceAdd = undefined;
   };
 
+  $scope.onPaymentBtnClick = function() {
+    myRest.makePayment(moment());
+  };
+
 });

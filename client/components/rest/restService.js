@@ -546,6 +546,21 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function makePayment(timestamp) {
+      var request = $http({
+        method: "post",
+        url: baseURL + 'payment',
+        data: {
+          "RFID": "1111-2222-3333-4444",
+          "Timestamp": timestamp.unix(),
+          "ServiceId": "556436c457ab120001000001",
+          "ApplicationId": "55643649dade7e0001000001",
+          "OrganizationId": "55643625c98e560001000001"
+        }
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
     // methods necessary only for the testing, debugging
     //--------------------------------------------------
 
@@ -569,8 +584,9 @@ mod.service(
       getTurnover:      getTurnover,
       getTurnoverHistory: getTurnoverHistory,
       // methods necessary only for the testing, debugging
-      postTurnover: postTurnover,
-      replenishBalance: replenishBalance
+      postTurnover:     postTurnover,
+      replenishBalance: replenishBalance,
+      makePayment:      makePayment
     });
   }
 );
