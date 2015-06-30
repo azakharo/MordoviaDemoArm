@@ -11,6 +11,7 @@ mod.controller('TestCtrl', function ($scope, $log, myRest) {
       type: 'input',
       templateOptions: {
         type: 'number',
+        min: 0,
         label: 'New turnover value',
         placeholder: 'Enter integer',
         required: false
@@ -21,6 +22,7 @@ mod.controller('TestCtrl', function ($scope, $log, myRest) {
       type: 'input',
       templateOptions: {
         type: 'number',
+        min: 0,
         label: 'Balance Addition',
         placeholder: 'Enter positive integer',
         required: false
