@@ -4,6 +4,11 @@ var mod = angular.module('demoarmApp');
 
 mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
   $scope.timePeriod = 'year';
+  var privileges = [
+    ['Нет льгот', 20],
+    ['Пенсионеры', 50],
+    ['Студенты', 30]
+  ];
 
   function drawPrivilegesChart() {
     $('#privileges-chart').highcharts({
@@ -21,7 +26,8 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
         enabled: false
       },
       tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        headerFormat: '',
+        pointFormat: '{point.name}: <b>{point.y:.0f}</b>'
       },
       plotOptions: {
         pie: {
@@ -38,20 +44,8 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
       },
       series: [{
         type: 'pie',
-        name: 'Browser share',
-        data: [
-          ['Firefox',   45.0],
-          ['IE',       26.8],
-          {
-            name: 'Chrome',
-            y: 12.8,
-            sliced: true,
-            selected: true
-          },
-          ['Safari',    8.5],
-          ['Opera',     6.2],
-          ['Others',   0.7]
-        ]
+        name: 'privileges',
+        data: privileges
       }]
     });
   }
