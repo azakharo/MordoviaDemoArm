@@ -5,13 +5,53 @@ var mod = angular.module('demoarmApp');
 mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
   $scope.timePeriod = 'year';
 
-  var privileges = [
-    ['Нет льгот', 20],
-    ['Пенсионеры', 50],
-    ['Студенты', 30]
+  //*******************************************************
+  // Privileges chart
+
+  // Dummy data
+  var transPerPrivileges = [
+    {
+      privilege: 'unprivileged',
+      transactions: 20
+    },
+    {
+      privilege: 'pensioners',
+      transactions: 50
+    },
+    {
+      privilege: 'students',
+      transactions: 30
+    },
   ];
 
+  var privilegeDesc = {
+    'unprivileged': {
+      name: 'Нет льгот',
+      color: '#000000'
+    },
+    'pensioners': {
+      name: 'Пенсионеры',
+      color: '#0000FF'
+    },
+    'students': {
+      name: 'Студенты',
+      color: '#00FF00'
+    }
+  };
+
   function drawPrivilegesChart() {
+    // Prepare data for the chart
+    var data = [];
+    transPerPrivileges.forEach(function(privilTrans) {
+      var dataItem = {
+        y: privilTrans.transactions,
+        name: privilegeDesc[privilTrans.privilege].name,
+        color: privilegeDesc[privilTrans.privilege].color
+      };
+      data.push(dataItem);
+    });
+
+    // Draw chart
     $('#privileges-chart').highcharts({
       chart: {
         backgroundColor: '#20B2AA',
@@ -46,18 +86,63 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
       series: [{
         type: 'pie',
         name: 'privileges',
-        data: privileges
+        data: data
       }]
     });
   }
 
-  var cards = [
-    ['ЕСЭК', 10],
-    ['Электронный билет', 20],
-    ['Обычный билет', 70]
+  // Privileges chart
+  //*******************************************************
+
+
+  /////////////////////////////////////////////////////////
+  // Cards chart
+
+  // Dummy data
+  var transPerCards = [
+    {
+      cardType: 'esek',
+      transactions: 10
+    },
+    {
+      cardType: 'electronic',
+      transactions: 20
+    },
+    {
+      cardType: 'usual',
+      transactions: 70
+    },
   ];
 
+  var cardTypeDesc = {
+    'esek': {
+      name: 'ЕСЭК',
+      color: '#FF4500'
+    },
+    'electronic': {
+      name: 'Электронные билеты',
+      color: '#F08080'
+    },
+    'usual': {
+      name: 'Обычные билеты',
+      color: '#FFA500'
+    }
+  };
+
+
   function drawCardsChart() {
+    // Prepare data for the chart
+    var data = [];
+    transPerCards.forEach(function(cardTypeTrans) {
+      var dataItem = {
+        y: cardTypeTrans.transactions,
+        name: cardTypeDesc[cardTypeTrans.cardType].name,
+        color: cardTypeDesc[cardTypeTrans.cardType].color
+      };
+      data.push(dataItem);
+    });
+
+    // Draw chart
     $('#cards-chart').highcharts({
       chart: {
         backgroundColor: '#20B2AA',
@@ -93,13 +178,16 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
       series: [{
         type: 'pie',
         name: 'cards',
-        data: cards
+        data: data
       }],
       legend: {
         labelFormat: '<b>{name}</b>: {percentage:.1f} %'
       }
     });
   }
+
+  // Cards chart
+  /////////////////////////////////////////////////////////
 
   drawPrivilegesChart();
   drawCardsChart();
