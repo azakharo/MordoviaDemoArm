@@ -54,7 +54,7 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
     // Draw chart
     $('#privileges-chart').highcharts({
       chart: {
-        backgroundColor: '#20B2AA',
+        backgroundColor: null,
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
@@ -145,7 +145,7 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
     // Draw chart
     $('#cards-chart').highcharts({
       chart: {
-        backgroundColor: '#20B2AA',
+        backgroundColor: null,
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,

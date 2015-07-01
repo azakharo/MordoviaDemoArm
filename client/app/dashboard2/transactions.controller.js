@@ -8,10 +8,14 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
   function drawChart() {
     $('#trans-chart').highcharts({
       chart: {
-        type: 'column'
+        type: 'column',
+        backgroundColor: null
       },
       title: {
-        text: 'Stacked column chart'
+        text: null
+      },
+      exporting: {
+        enabled: false
       },
       xAxis: {
         categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
@@ -19,7 +23,7 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
       yAxis: {
         min: 0,
         title: {
-          text: 'Total fruit consumption'
+          text: 'Кол-во транзакций'
         },
         stackLabels: {
           enabled: true,
