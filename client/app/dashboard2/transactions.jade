@@ -1,3 +1,9 @@
-#trans-title Количество транзакций
-#trans-period-buttons Кнопки
+#pies-header
+  #trans-title Количество транзакций
+  #trans-aggr-period-buttons
+    .btn-group
+      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'day'") День
+      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'week'") Неделя
+      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'month'") Месяц
+      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'year'") Год
 #trans-chart

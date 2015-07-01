@@ -3,6 +3,7 @@
 var mod = angular.module('demoarmApp');
 
 mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
+  $scope.aggrPeriod = 'day';
 
   function drawChart() {
     $('#trans-chart').highcharts({
