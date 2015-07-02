@@ -95,57 +95,44 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
   }
 
   $scope.onAggrPeriodChanged = function() {
+    buildChart($scope.aggrPeriod);
+  };
+
+  function groupEventsByDay(event) {
+    return event.timestamp.format('DD.MM');
+  }
+
+  function groupEventsByWeek(event) {
+    return 'ww' + event.timestamp.format('ww');
+  }
+
+  function groupEventsByMonth(event) {
+    return event.timestamp.format('MM.YYYY');
+  }
+
+  function groupEventsByYear(event) {
+    return event.timestamp.format('YYYY');
+  }
+
+  var aggrPer2groupFunc = {
+    'day'   : groupEventsByDay,
+    'week'  : groupEventsByWeek,
+    'month' : groupEventsByMonth,
+    'year'  : groupEventsByYear
   };
 
   function buildChart(aggrPeriod) {
     myRest.getEvents().then(function (events) {
-      // Prepare dummy test data
-      var today = moment();
-      var yesterday = moment().subtract(1, 'days');
-      var beforeYesterday = moment().subtract(2, 'days');
-      var myevents = [];
-      var evt = {};
-
-      // before yesterday
-      evt.timestamp = beforeYesterday;
-      evt.isSuccess = true;
-      myevents.push(evt);
-
-      myevents.push(angular.copy(evt));
-
-      evt = angular.copy(evt);
-      evt.isSuccess = false;
-      myevents.push(evt);
-
-      // yesterday
-      evt = {};
-      evt.timestamp = yesterday;
-      evt.isSuccess = true;
-      myevents.push(evt);
-      myevents.push(angular.copy(evt));
-      myevents.push(angular.copy(evt));
-
-      // today
-      evt = {};
-      evt.timestamp = today;
-      evt.isSuccess = false;
-      myevents.push(evt);
-
-      myevents.push(angular.copy(evt));
-
-      evt = angular.copy(evt);
-      evt.isSuccess = true;
-      myevents.push(evt);
-
       // Limit data, if necessary
       ;
 
-      // Aggregate data
-      var groupsObj = _.groupBy(myevents, function(e) {
-        return e.timestamp.format('DD.MM');
-      });
-      //log(groupsObj);
+      // Originally events are sorted by timestamp desc.
+      // Reverse
+      _(events).reverse();
 
+      // Aggregate data
+      var groupsObj = _.groupBy(events, aggrPer2groupFunc[aggrPeriod]);
+      //log(groupsObj);
 
       // Calc number of success, failure for every time period
       var groups = [];
@@ -176,7 +163,6 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
       drawChart(groups);
     });
   }
-
 
   function log(msg) {
     $log.debug(msg);
