@@ -169,9 +169,21 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
         //log("errors: " + errors);
       });
 
+      groups = limitGroups(groups);
+
       // Draw chart
       drawChart(groups);
     });
+  }
+
+  function limitGroups(groups) {
+    // Return latest (last) 30 groups
+    if (groups.length > 30) {
+      return _.takeRight(groups, 30);
+    }
+    else {
+      return groups;
+    }
   }
 
   function log(msg) {
