@@ -18,10 +18,11 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
         enabled: false
       },
       xAxis: {
-        categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+        categories: ['29.06', '30.06', '01.07']
       },
       yAxis: {
         min: 0,
+        allowDecimals: false,
         title: {
           text: 'Кол-во транзакций'
         },
@@ -29,26 +30,26 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
           enabled: true,
           style: {
             fontWeight: 'bold',
-            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+            color: (Highcharts.theme && Highcharts.theme.textColor) || 'white'
           }
         }
       },
       legend: {
         align: 'right',
-        x: -30,
+        x: -5,
         verticalAlign: 'top',
-        y: 25,
+        y: 10,
         floating: true,
-        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+        backgroundColor: null,
         borderColor: '#CCC',
-        borderWidth: 1,
+        borderWidth: 0,
         shadow: false
       },
       tooltip: {
         formatter: function () {
           return '<b>' + this.x + '</b><br/>' +
             this.series.name + ': ' + this.y + '<br/>' +
-            'Total: ' + this.point.stackTotal;
+            'Всего: ' + this.point.stackTotal;
         }
       },
       plotOptions: {
@@ -64,14 +65,13 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
         }
       },
       series: [{
-        name: 'John',
-        data: [5, 3, 4, 7, 2]
+        name: 'Успешных',
+        data: [5, 3, 4],
+        color: '#90EE90'
       }, {
-        name: 'Jane',
-        data: [2, 2, 3, 2, 1]
-      }, {
-        name: 'Joe',
-        data: [3, 4, 4, 2, 5]
+        name: 'Ошибки',
+        data: [2, 2, 3],
+        color: '#F08080'
       }]
     });
   }
