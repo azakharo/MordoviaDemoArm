@@ -121,10 +121,20 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
     'year'  : groupEventsByYear
   };
 
+  function limitEvents(events, aggrPeriod) {
+    if (aggrPeriod === 'day' || aggrPeriod === 'week') {
+      // limit data to 1 year ago to prevent the interference
+      var oldest = moment().subtract(1, 'years');
+      return _.filter(events, function(e) {
+        return e.timestamp.isAfter(oldest);
+      });
+    }
+  }
+
   function buildChart(aggrPeriod) {
     myRest.getEvents().then(function (events) {
       // Limit data, if necessary
-      ;
+      events = limitEvents(events, aggrPeriod);
 
       // Originally events are sorted by timestamp desc.
       // Reverse
