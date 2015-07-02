@@ -2,8 +2,8 @@
   #trans-title Количество транзакций
   #trans-aggr-period-buttons
     .btn-group
-      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'day'") День
-      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'week'") Неделя
-      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'month'") Месяц
-      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'year'") Год
+      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'day'", ng-change="onAggrPeriodChanged()") День
+      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'week'", ng-change="onAggrPeriodChanged()") Неделя
+      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'month'", ng-change="onAggrPeriodChanged()") Месяц
+      label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'year'", ng-change="onAggrPeriodChanged()") Год
 #trans-chart
