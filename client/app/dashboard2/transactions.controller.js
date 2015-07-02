@@ -2,10 +2,18 @@
 
 var mod = angular.module('demoarmApp');
 
-mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
+mod.controller('TransactionsCtrl', function ($scope, $interval, $log, myRest) {
   // Startup code
   $scope.aggrPeriod = 'day';
   buildChart($scope.aggrPeriod);
+
+  var stopAutoRefresh = $interval(function () {
+    buildChart($scope.aggrPeriod);
+  }, 5000);
+
+  $scope.$on('$destroy', function () {
+    $interval.cancel(stopAutoRefresh);
+  });
 
 
   //*****************************************************************
@@ -131,8 +139,15 @@ mod.controller('TransactionsCtrl', function ($scope, $timeout, $log, myRest) {
     }
   }
 
+  var prevEvents = undefined;
   function buildChart(aggrPeriod) {
     myRest.getEvents().then(function (events) {
+      // optimization
+      if (angular.equals(events, prevEvents)) {
+        return; // just do nothing
+      }
+      prevEvents = angular.copy(events);
+
       // Limit data, if necessary
       events = limitEvents(events, aggrPeriod);
 
