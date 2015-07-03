@@ -88,6 +88,9 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
         plotShadow: false,
         marginTop: 0
       },
+      credits: {
+        enabled: false
+      },
       title: {
         text: null
       },
@@ -182,6 +185,9 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
         plotBorderWidth: null,
         plotShadow: false,
         marginTop: 0
+      },
+      credits: {
+        enabled: false
       },
       title: {
         text: null
@@ -278,24 +284,31 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
       // Draw card types pie
       drawCardsChart(cardTypeGroups);
 
-      $timeout(function() {
-        //log("pies wrapper w: " + $('#pies-wrapper').width());
-        //log("pies wrapper h: " + $('#pies-wrapper').height());
-        var wrapperW = $('#pies-wrapper').width();
-        var wrapperH = $('#pies-wrapper').height();
-        var piePrivs = $('#privileges-chart').highcharts();
-        var pieCards = $('#cards-chart').highcharts();
-        if (wrapperH === 400) { // horiz pies
-          piePrivs.setSize(wrapperW / 2, wrapperH, false);
-          pieCards.setSize(wrapperW / 2, wrapperH, false);
-        }
-        else if (wrapperH === 800) { // vert pies
-          piePrivs.setSize(wrapperW, wrapperH / 2, false);
-          pieCards.setSize(wrapperW, wrapperH / 2, false);
-        }
-      }, 1000);
+      $timeout(resizeCharts, 100);
     });
   }
+
+  function resizeCharts() {
+    //log("resizeCharts");
+    //log("pies wrapper w: " + $('#pies-wrapper').width());
+    //log("pies wrapper h: " + $('#pies-wrapper').height());
+    var wrapperW = $('#pies-wrapper').width();
+    var wrapperH = $('#pies-wrapper').height();
+    var piePrivs = $('#privileges-chart').highcharts();
+    var pieCards = $('#cards-chart').highcharts();
+    if (wrapperH === 400) { // horiz pies
+      piePrivs.setSize(wrapperW / 2 - 40, wrapperH, false);
+      pieCards.setSize(wrapperW / 2 - 40, wrapperH, false);
+    }
+    else if (wrapperH === 800) { // vert pies
+      piePrivs.setSize(wrapperW, wrapperH / 2, false);
+      pieCards.setSize(wrapperW, wrapperH / 2, false);
+    }
+  }
+
+  $(window).resize(function () {
+    $timeout(resizeCharts, 100);
+  });
 
   function limitEvents(events, timePeriod) {
     var oldest = moment();

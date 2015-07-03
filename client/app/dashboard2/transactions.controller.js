@@ -2,7 +2,7 @@
 
 var mod = angular.module('demoarmApp');
 
-mod.controller('TransactionsCtrl', function ($scope, $interval, $log, myRest) {
+mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, myRest) {
   // Startup code
   $scope.aggrPeriod = 'day';
   buildChart($scope.aggrPeriod);
@@ -36,6 +36,9 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $log, myRest) {
       chart: {
         type: 'column',
         backgroundColor: null
+      },
+      credits: {
+        enabled: false
       },
       title: {
         text: null
@@ -193,8 +196,22 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $log, myRest) {
 
       // Draw chart
       drawChart(groups);
+
+      $timeout(resizeChart, 100);
     });
   }
+
+  function resizeChart() {
+    //log("trans chart resize");
+    var wrapperW = $('#trans-chart').width();
+    var wrapperH = $('#trans-chart').height();
+    var chart = $('#trans-chart').highcharts();
+    chart.setSize(wrapperW - 100, wrapperH, false);
+  }
+
+  $(window).resize(function () {
+    $timeout(resizeChart, 100);
+  });
 
   function limitGroups(groups) {
     // Return latest (last) 30 groups
