@@ -238,6 +238,9 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest) {
       //log("number of events: " + events.length);
 
       $scope.noData = $scope.timePeriod === 'week'; // events.length === 0;
+      if ($scope.noData) {
+        events = [];
+      }
 
       // Calc privilege distribution
       // Aggregate data by privilege string code
