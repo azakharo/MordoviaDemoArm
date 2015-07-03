@@ -5,6 +5,7 @@ var mod = angular.module('demoarmApp');
 mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) {
   // Startup code
   $scope.timePeriod = 'year';
+  // TODO solve issue with vert pies with no data (allocated space)
   $scope.noData = false;
   buildCharts($scope.timePeriod);
 
@@ -243,10 +244,7 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
       //log("limit events");
       //log("number of events: " + events.length);
 
-      $scope.noData = $scope.timePeriod === 'week'; // events.length === 0;
-      if ($scope.noData) {
-        events = [];
-      }
+      $scope.noData = events.length === 0;
 
       // Calc privilege distribution
       // Aggregate data by privilege string code
