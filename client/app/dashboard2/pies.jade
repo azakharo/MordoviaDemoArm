@@ -3,10 +3,10 @@
   #pies-period-buttons
     //pre {{ timePeriod || 'undefined'}}
     .btn-group
-      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'day'") День
-      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'week'") Неделя
-      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'month'") Месяц
-      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'year'") Год
+      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'day'", ng-change="onTimePeriodChanged()") День
+      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'week'", ng-change="onTimePeriodChanged()") Неделя
+      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'month'", ng-change="onTimePeriodChanged()") Месяц
+      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'year'", ng-change="onTimePeriodChanged()") Год
 #pies-wrapper
   #privileges-chart
   #cards-chart

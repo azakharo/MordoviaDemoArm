@@ -3,51 +3,69 @@
 var mod = angular.module('demoarmApp');
 
 mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
+  // Startup code
   $scope.timePeriod = 'year';
+  buildCharts($scope.timePeriod);
+
+  ///////////////////////////////////////////////////////////////////
+  // Implementation
+
+  $scope.onTimePeriodChanged = function() {
+    buildCharts($scope.timePeriod);
+  };
 
   //*******************************************************
   // Privileges chart
 
   // Dummy data
-  var transPerPrivileges = [
-    {
-      privilege: 'unprivileged',
-      transactions: 20
-    },
-    {
-      privilege: 'pensioners',
-      transactions: 50
-    },
-    {
-      privilege: 'students',
-      transactions: 30
-    },
-  ];
+  //var transPerPrivileges = [
+  //  {
+  //    privilege: 'unprivileged',
+  //    transactions: 20
+  //  },
+  //  {
+  //    privilege: 'pensioners',
+  //    transactions: 50
+  //  },
+  //  {
+  //    privilege: 'students',
+  //    transactions: 30
+  //  },
+  //];
 
   var privilegeDesc = {
     'unprivileged': {
       name: 'Нет льгот',
       color: '#000000'
-    },
-    'pensioners': {
-      name: 'Пенсионеры',
-      color: '#0000FF'
-    },
-    'students': {
-      name: 'Студенты',
-      color: '#00FF00'
     }
+    //'pensioners': {
+    //  name: 'Пенсионеры',
+    //  color: '#0000FF'
+    //},
+    //'students': {
+    //  name: 'Студенты',
+    //  color: '#00FF00'
+    //}
   };
 
-  function drawPrivilegesChart() {
+  function drawPrivilegesChart(privilGroups) {
     // Prepare data for the chart
     var data = [];
-    transPerPrivileges.forEach(function(privilTrans) {
-      var dataItem = {
-        y: privilTrans.transactions,
-        name: privilegeDesc[privilTrans.privilege].name,
-        color: privilegeDesc[privilTrans.privilege].color
-      };
+    privilGroups.forEach(function(privilGrp) {
+      var dataItem;
+      if (privilegeDesc.hasOwnProperty(privilGrp.privilege)) {
+        dataItem = {
+          y: privilGrp.transactions,
+          name: privilegeDesc[privilGrp.privilege].name,
+          color: privilegeDesc[privilGrp.privilege].color
+        };
+      }
+      else {
+        dataItem = {
+          y: privilGrp.transactions,
+          name: privilGrp.privilege
+        };
+      }
       data.push(dataItem);
     });
 
@@ -99,45 +117,49 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
   // Cards chart
 
   // Dummy data
-  var transPerCards = [
-    {
-      cardType: 'esek',
-      transactions: 10
-    },
-    {
-      cardType: 'electronic',
-      transactions: 20
-    },
-    {
-      cardType: 'usual',
-      transactions: 70
-    },
-  ];
+  //var transPerCards = [
+  //  {
+  //    cardType: 'esek',
+  //    transactions: 10
+  //  },
+  //  {
+  //    cardType: 'electronic',
+  //    transactions: 20
+  //  },
+  //  {
+  //    cardType: 'usual',
+  //    transactions: 70
+  //  },
+  //];
 
   var cardTypeDesc = {
     'esek': {
       name: 'ЕСЭК',
       color: '#FF4500'
     },
-    'electronic': {
-      name: 'Электронные билеты',
+    'others': {
+      name: 'не ЕСЭК',
       color: '#F08080'
-    },
-    'usual': {
-      name: 'Обычные билеты',
-      color: '#FFA500'
     }
+    //'electronic': {
+    //  name: 'Электронные билеты',
+    //  color: '#F08080'
+    //},
+    //'usual': {
+    //  name: 'Обычные билеты',
+    //  color: '#FFA500'
+    //}
   };
 
 
-  function drawCardsChart() {
+  function drawCardsChart(cardTypeGroups) {
     // Prepare data for the chart
     var data = [];
-    transPerCards.forEach(function(cardTypeTrans) {
+    cardTypeGroups.forEach(function(cardTypeGrp) {
       var dataItem = {
-        y: cardTypeTrans.transactions,
-        name: cardTypeDesc[cardTypeTrans.cardType].name,
-        color: cardTypeDesc[cardTypeTrans.cardType].color
+        y: cardTypeGrp.transactions,
+        name: cardTypeDesc[cardTypeGrp.cardType].name,
+        color: cardTypeDesc[cardTypeGrp.cardType].color
       };
       data.push(dataItem);
     });
@@ -189,8 +211,85 @@ mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
   // Cards chart
   /////////////////////////////////////////////////////////
 
-  drawPrivilegesChart();
-  drawCardsChart();
+  var prevTimePer = angular.copy($scope.timePeriod);
+  var prevEvents = undefined;
+  function buildCharts(timePeriod) {
+    myRest.getEvents().then(function (events) {
+      // optimization
+      if (prevTimePer === $scope.timePeriod && angular.equals(events, prevEvents)) {
+        return; // just do nothing
+      }
+      prevTimePer = angular.copy($scope.timePeriod);
+      prevEvents = angular.copy(events);
+
+      // Limit data
+      events = limitEvents(events, timePeriod);
+      //log("limit events");
+      //log("number of events: " + events.length);
+
+      // Calc privilege distribution
+      // Aggregate data by privilege string code
+      var privGroupsObj = _.groupBy(events, function(e) {
+        return e.currency.privilege;
+      });
+      //log(privGroupsObj);
+      var privGroups = [];
+      Object.keys(privGroupsObj).forEach(function(grpName) {
+        var group = {};
+        group.privilege = grpName;
+        group.transactions = privGroupsObj[grpName].length;
+        privGroups.push(group);
+        //log(grpName + " " + group.transactions);
+      });
+
+      // Calc card type distribution
+      // Aggregate data by card type
+      var cardTypeGroupsObj = _.groupBy(events, function(e) {
+        return e.card.isESEK ? "esek" : "others";
+      });
+      //log(cardTypeGroupsObj);
+      var cardTypeGroups = [];
+      Object.keys(cardTypeGroupsObj).forEach(function(grpName) {
+        var group = {};
+        group.cardType = grpName;
+        group.transactions = cardTypeGroupsObj[grpName].length;
+        cardTypeGroups.push(group);
+        //log(grpName + " " + group.transactions);
+      });
+
+      // Draw privileges pie
+      drawPrivilegesChart(privGroups);
+
+      // Draw card types pie
+      drawCardsChart(cardTypeGroups);
+    });
+  }
+
+  function limitEvents(events, timePeriod) {
+    var oldest = moment();
+
+    switch (timePeriod) {
+      case 'day':
+        oldest.startOf('day');
+        break;
+      case 'week':
+        oldest.startOf('week');
+        break;
+      case 'month':
+        oldest.startOf('month');
+        break;
+      case 'year':
+        oldest.startOf('year');
+        break;
+      default:
+        log(format("pie charts: UNEXPECTED time period '{}'", timePeriod));
+        break;
+    }
+
+    return _.filter(events, function(e) {
+      return e.timestamp.isAfter(oldest);
+    });
+  }
 
   function log(msg) {
     $log.debug(msg);

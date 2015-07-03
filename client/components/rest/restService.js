@@ -141,6 +141,7 @@ mod.service(
                 curr.srvID = srvCurr.Id;
                 curr.code = srvCurr.Code;
                 curr.name = srvCurr.Info.Title;
+                curr.privilege = (srvCurr.Exemption) ? srvCurr.Exemption : 'unprivileged';
                 currencies.push(curr);
               });
 
