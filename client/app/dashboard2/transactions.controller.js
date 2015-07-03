@@ -111,7 +111,7 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $log, myRest) {
   }
 
   function groupEventsByWeek(event) {
-    return 'ww' + event.timestamp.format('ww');
+    return 'ww' + event.timestamp.format('WW');
   }
 
   function groupEventsByMonth(event) {
@@ -137,15 +137,20 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $log, myRest) {
         return e.timestamp.isAfter(oldest);
       });
     }
+    else {
+      return events;
+    }
   }
 
+  var prevAggrPer = angular.copy($scope.aggrPeriod);
   var prevEvents = undefined;
   function buildChart(aggrPeriod) {
     myRest.getEvents().then(function (events) {
       // optimization
-      if (angular.equals(events, prevEvents)) {
+      if (prevAggrPer === $scope.aggrPeriod && angular.equals(events, prevEvents)) {
         return; // just do nothing
       }
+      prevAggrPer = angular.copy($scope.aggrPeriod);
       prevEvents = angular.copy(events);
 
       // Limit data, if necessary
