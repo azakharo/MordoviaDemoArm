@@ -174,7 +174,7 @@ mod.service(
             // TODO use real card state here
             card.state = "success";
 
-            card.isESEK = srvAcc.UserId !== "000000000000000000000000";
+            card.isESEK = srvAcc.UserId !== undefined && srvAcc.UserId !== null;
 
             // Request bags for the account
             card.bags = [];
