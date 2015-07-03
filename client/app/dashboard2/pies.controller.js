@@ -2,10 +2,19 @@
 
 var mod = angular.module('demoarmApp');
 
-mod.controller('PiesCtrl', function ($scope, $timeout, $log, myRest) {
+mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest) {
   // Startup code
   $scope.timePeriod = 'year';
   buildCharts($scope.timePeriod);
+
+  var stopAutoRefresh = $interval(function () {
+    buildCharts($scope.timePeriod);
+  }, 5000);
+
+  $scope.$on('$destroy', function () {
+    $interval.cancel(stopAutoRefresh);
+  });
+
 
   ///////////////////////////////////////////////////////////////////
   // Implementation
