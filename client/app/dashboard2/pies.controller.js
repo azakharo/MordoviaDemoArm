@@ -2,7 +2,7 @@
 
 var mod = angular.module('demoarmApp');
 
-mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest) {
+mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) {
   // Startup code
   $scope.timePeriod = 'year';
   $scope.noData = false;
@@ -277,6 +277,23 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest) {
 
       // Draw card types pie
       drawCardsChart(cardTypeGroups);
+
+      $timeout(function() {
+        //log("pies wrapper w: " + $('#pies-wrapper').width());
+        //log("pies wrapper h: " + $('#pies-wrapper').height());
+        var wrapperW = $('#pies-wrapper').width();
+        var wrapperH = $('#pies-wrapper').height();
+        var piePrivs = $('#privileges-chart').highcharts();
+        var pieCards = $('#cards-chart').highcharts();
+        if (wrapperH === 400) { // horiz pies
+          piePrivs.setSize(wrapperW / 2, wrapperH, false);
+          pieCards.setSize(wrapperW / 2, wrapperH, false);
+        }
+        else if (wrapperH === 800) { // vert pies
+          piePrivs.setSize(wrapperW, wrapperH / 2, false);
+          pieCards.setSize(wrapperW, wrapperH / 2, false);
+        }
+      }, 1000);
     });
   }
 
