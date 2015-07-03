@@ -5,6 +5,7 @@ var mod = angular.module('demoarmApp');
 mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest) {
   // Startup code
   $scope.timePeriod = 'year';
+  $scope.noData = false;
   buildCharts($scope.timePeriod);
 
   var stopAutoRefresh = $interval(function () {
@@ -235,6 +236,8 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest) {
       events = limitEvents(events, timePeriod);
       //log("limit events");
       //log("number of events: " + events.length);
+
+      $scope.noData = $scope.timePeriod === 'week'; // events.length === 0;
 
       // Calc privilege distribution
       // Aggregate data by privilege string code
