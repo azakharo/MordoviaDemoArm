@@ -206,7 +206,7 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
     var wrapperW = $('#trans-chart').width();
     var wrapperH = $('#trans-chart').height();
     var chart = $('#trans-chart').highcharts();
-    chart.setSize(wrapperW - 100, wrapperH, false);
+    chart.setSize(wrapperW, wrapperH, false);
   }
 
   $(window).resize(function () {

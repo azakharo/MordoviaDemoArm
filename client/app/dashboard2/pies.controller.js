@@ -2,7 +2,7 @@
 
 var mod = angular.module('demoarmApp');
 
-mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) {
+mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, $window) {
   // Startup code
   $scope.timePeriod = 'year';
   // TODO solve issue with vert pies with no data (allocated space)
@@ -83,6 +83,7 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
     // Draw chart
     $('#privileges-chart').highcharts({
       chart: {
+        //backgroundColor: "#FF0000",
         backgroundColor: null,
         plotBackgroundColor: null,
         plotBorderWidth: null,
@@ -181,6 +182,7 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
     // Draw chart
     $('#cards-chart').highcharts({
       chart: {
+        //backgroundColor: "#000000",
         backgroundColor: null,
         plotBackgroundColor: null,
         plotBorderWidth: null,
@@ -294,10 +296,9 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
     var wrapperH = $('#pies-wrapper').height();
     var piePrivs = $('#privileges-chart').highcharts();
     var pieCards = $('#cards-chart').highcharts();
-    // TODO solve issue with Highcharts and window resizing
     if (wrapperH === 400) { // horiz pies
-      piePrivs.setSize(wrapperW / 2 - 40, wrapperH, false);
-      pieCards.setSize(wrapperW / 2 - 40, wrapperH, false);
+      piePrivs.setSize(wrapperW / 2, wrapperH, false);
+      pieCards.setSize(wrapperW / 2, wrapperH, false);
     }
     else if (wrapperH === 800) { // vert pies
       piePrivs.setSize(wrapperW, wrapperH / 2, false);
@@ -306,7 +307,9 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
   }
 
   $(window).resize(function () {
-    $timeout(resizeCharts, 100);
+    //$timeout(resizeCharts, 100);
+    // TODO solve issue with Highcharts and window resizing. The following is work-around.
+    $window.location.reload();
   });
 
   function limitEvents(events, timePeriod) {
