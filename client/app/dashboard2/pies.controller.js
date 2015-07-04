@@ -12,7 +12,6 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, 
     }
   }
 
-  // TODO solve issue with vert pies with no data (allocated space)
   $scope.noData = false;
   buildCharts($scope.timePeriod);
 
