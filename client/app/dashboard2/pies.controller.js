@@ -93,8 +93,8 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, 
     // Draw chart
     $('#privileges-chart').highcharts({
       chart: {
-        //backgroundColor: "#FF0000",
-        backgroundColor: null,
+        backgroundColor: "#FF0000",
+        //backgroundColor: null,
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
@@ -192,8 +192,8 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, 
     // Draw chart
     $('#cards-chart').highcharts({
       chart: {
-        //backgroundColor: "#000000",
-        backgroundColor: null,
+        backgroundColor: "#000000",
+//        backgroundColor: null,
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
@@ -295,6 +295,12 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, 
       drawCardsChart(cardTypeGroups);
 
       $timeout(resizeCharts, 100);
+
+      if (events.length === 0) {
+        // drop the charts
+        $('#privileges-chart').highcharts().destroy();
+        $('#cards-chart').highcharts().destroy();
+      }
     });
   }
 
