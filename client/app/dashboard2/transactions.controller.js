@@ -5,6 +5,13 @@ var mod = angular.module('demoarmApp');
 mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, myRest) {
   // Startup code
   $scope.aggrPeriod = 'day';
+  if (localStorage) {
+    var found = localStorage.getItem("aggrPeriod");
+    if (found) {
+      $scope.aggrPeriod = found;
+    }
+  }
+
   buildChart($scope.aggrPeriod);
 
   var stopAutoRefresh = $interval(function () {
@@ -106,6 +113,9 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
   }
 
   $scope.onAggrPeriodChanged = function() {
+    if (localStorage) {
+      localStorage.setItem("aggrPeriod", $scope.aggrPeriod);
+    }
     buildChart($scope.aggrPeriod);
   };
 

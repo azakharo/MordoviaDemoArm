@@ -5,6 +5,13 @@ var mod = angular.module('demoarmApp');
 mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, $window) {
   // Startup code
   $scope.timePeriod = 'year';
+  if (localStorage) {
+    var found = localStorage.getItem("timePeriod");
+    if (found) {
+      $scope.timePeriod = found;
+    }
+  }
+
   // TODO solve issue with vert pies with no data (allocated space)
   $scope.noData = false;
   buildCharts($scope.timePeriod);
@@ -22,6 +29,9 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, 
   // Implementation
 
   $scope.onTimePeriodChanged = function() {
+    if (localStorage) {
+      localStorage.setItem("timePeriod", $scope.timePeriod);
+    }
     buildCharts($scope.timePeriod);
   };
 
