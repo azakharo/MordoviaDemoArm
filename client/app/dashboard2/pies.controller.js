@@ -92,8 +92,8 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, 
     // Draw chart
     $('#privileges-chart').highcharts({
       chart: {
-        backgroundColor: "#FF0000",
-        //backgroundColor: null,
+        //backgroundColor: "#FF0000",
+        backgroundColor: null,
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
@@ -191,8 +191,8 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, 
     // Draw chart
     $('#cards-chart').highcharts({
       chart: {
-        backgroundColor: "#000000",
-//        backgroundColor: null,
+//        backgroundColor: "#000000",
+        backgroundColor: null,
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
@@ -305,15 +305,20 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, 
 
   function resizeCharts() {
     //log("resizeCharts");
-    //log("pies wrapper w: " + $('#pies-wrapper').width());
-    //log("pies wrapper h: " + $('#pies-wrapper').height());
     var wrapperW = $('#pies-wrapper').width();
     var wrapperH = $('#pies-wrapper').height();
+    //log("wrapper W: " + wrapperW);
+    //log("wrapper H: " + wrapperH);
+    //log("right up W:" + $('#my-right-up').width());
+    //log("right up H:" + $('#my-right-up').height());
     var piePrivs = $('#privileges-chart').highcharts();
     var pieCards = $('#cards-chart').highcharts();
     if (wrapperH === 400) { // horiz pies
-      piePrivs.setSize(wrapperW / 2, wrapperH, false);
-      pieCards.setSize(wrapperW / 2, wrapperH, false);
+      //log("header H:" + $('#pies-header').height());
+      var pieMustBeH = $('#my-right-up').height() - $('#pies-header').height() - 10;
+      //log("pieMustBeH:" + pieMustBeH);
+      piePrivs.setSize(wrapperW / 2, pieMustBeH, false);
+      pieCards.setSize(wrapperW / 2, pieMustBeH, false);
     }
     else if (wrapperH === 800) { // vert pies
       piePrivs.setSize(wrapperW, wrapperH / 2, false);

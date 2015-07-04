@@ -43,6 +43,7 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
       chart: {
         type: 'column',
         backgroundColor: null
+        //backgroundColor: "#ADD8E6"
       },
       credits: {
         enabled: false
@@ -215,8 +216,13 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
     //log("trans chart resize");
     var wrapperW = $('#trans-chart').width();
     var wrapperH = $('#trans-chart').height();
+    log("wrapper H: " + wrapperH);
+
+    var chartMustBeH = $('#my-right-down').height() - $('#trans-header').height() - 10;
+    log("chartMustBeH:" + chartMustBeH);
+
     var chart = $('#trans-chart').highcharts();
-    chart.setSize(wrapperW, wrapperH, false);
+    chart.setSize(wrapperW, chartMustBeH, false);
   }
 
   $(window).resize(function () {
