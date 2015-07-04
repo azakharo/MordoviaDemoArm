@@ -294,6 +294,7 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
     var wrapperH = $('#pies-wrapper').height();
     var piePrivs = $('#privileges-chart').highcharts();
     var pieCards = $('#cards-chart').highcharts();
+    // TODO solve issue with Highcharts and window resizing
     if (wrapperH === 400) { // horiz pies
       piePrivs.setSize(wrapperW / 2 - 40, wrapperH, false);
       pieCards.setSize(wrapperW / 2 - 40, wrapperH, false);
