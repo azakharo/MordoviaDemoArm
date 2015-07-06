@@ -2,7 +2,7 @@
 
 var mod = angular.module('demoarmApp');
 
-mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, $window) {
+mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) {
   // Startup code
   $scope.timePeriod = 'year';
   if (localStorage) {
@@ -325,12 +325,6 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout, 
       pieCards.setSize(wrapperW, wrapperH / 2, false);
     }
   }
-
-  $(window).resize(function () {
-    //$timeout(resizeCharts, 100);
-    // TODO solve issue with Highcharts and window resizing. The following is work-around.
-    $window.location.reload();
-  });
 
   function limitEvents(events, timePeriod) {
     var oldest = moment();
