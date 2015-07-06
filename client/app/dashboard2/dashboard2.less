@@ -10,7 +10,7 @@
   align-items: stretch;
   justify-content: space-between;
 
-  min-width: fit-content;
+//  min-width: fit-content;
 }
 
 //**********************
@@ -27,6 +27,8 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
+
+  overflow: hidden;
 }
 
 #header-logo {
@@ -40,6 +42,7 @@
   white-space: nowrap;
 //  background: green;
   flex: none;
+  padding-left: 5px;
 }
 
 #header-right-part {
@@ -104,8 +107,9 @@
 }
 
 /* Medium screens */
-@media screen and (max-width: 801px) and (orientation: portrait),
-  screen and (max-width: 1201px) and (orientation: landscape) {
+//@media screen and (max-width: 801px) and (orientation: portrait),
+//  screen and (max-width: 1201px) and (orientation: landscape) {
+@media screen and (max-width: 800px) {
 
   // disp sections vertically, one after another
   #wrapper, #content, #left-part, #right-part,
@@ -176,8 +180,9 @@
   padding: 10px 5px 0px 5px;
 }
 
-@media screen and (min-width: 801px) and (orientation: portrait),
-screen and (min-width: 1201px) and (orientation: landscape) {
+//@media screen and (min-width: 801px) and (orientation: portrait),
+//screen and (min-width: 1201px) and (orientation: landscape) {
+@media screen and (min-width: 801px) {
   #card-panels-container {
     // TODO fill remaining space in parent instead of 85vh
     height: 85vh;
@@ -187,7 +192,7 @@ screen and (min-width: 1201px) and (orientation: landscape) {
 
 .card-panel-heading {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   align-items: center;
   justify-content: space-between;
 }
@@ -249,7 +254,7 @@ screen and (min-width: 1201px) and (orientation: landscape) {
 #pies-title {
   flex: auto;
   font-size: x-large;
-  white-space: nowrap;
+//  white-space: nowrap;
 //  background: yellow;
 //  padding-left: 20px;
   .text-center;
