@@ -216,10 +216,10 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
     //log("trans chart resize");
     var wrapperW = $('#trans-chart').width();
     var wrapperH = $('#trans-chart').height();
-    log("wrapper H: " + wrapperH);
+    //log("wrapper H: " + wrapperH);
 
     var chartMustBeH = $('#my-right-down').height() - $('#trans-header').height() - 10;
-    log("chartMustBeH:" + chartMustBeH);
+    //log("chartMustBeH:" + chartMustBeH);
 
     var chart = $('#trans-chart').highcharts();
     chart.setSize(wrapperW, chartMustBeH, false);
