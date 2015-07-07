@@ -225,10 +225,6 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
     chart.setSize(wrapperW, chartMustBeH, false);
   }
 
-  $(window).resize(function () {
-    $timeout(resizeChart, 100);
-  });
-
   function limitGroups(groups) {
     // Return latest (last) 30 groups
     if (groups.length > 30) {
