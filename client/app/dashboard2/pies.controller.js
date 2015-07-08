@@ -117,19 +117,23 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
           allowPointSelect: true,
           cursor: 'pointer',
           dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-            style: {
-              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-            }
-          }
+            enabled: false
+            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            //style: {
+            //  color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            //}
+          },
+          showInLegend: true
         }
       },
       series: [{
         type: 'pie',
         name: 'privileges',
         data: data
-      }]
+      }],
+      legend: {
+        labelFormat: '<b>{name}</b>: {percentage:.1f} %'
+      }
     });
   }
 
