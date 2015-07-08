@@ -16,7 +16,7 @@
                 th.w25.no-border.text-right Баланс
                 th.w25.no-border.text-right Период действия
                 th.w25.no-border.text-right Кол-во операций
-              tr(ng-repeat='bag in card.bags')
+              tr(ng-repeat='bag in card.bags', ng-class="{ 'latest-bag': bag.isLatestTrans }")
                 td.w25.no-border(style="padding-left: 30px;") {{ bag.currency.name }}
                 td.w25.no-border.text-right
                   span(ng-class="{ animated: bag.wasUpdated, infinite: bag.wasUpdated, flash: bag.wasUpdated, 'table-cell-changed': bag.wasUpdated, 'bg-success': bag.wasUpdated }",

@@ -335,8 +335,9 @@ mod.service(
       });
     }
 
-    // For every card bag find total transaction count AND
-    // for every card find latest transaction
+    // 1. for every card bag find total transaction count
+    // 2. for every card find latest transaction
+    // 3. find bag with latest transaction, set isLatestTrans flag for it
     function calcTransactions(cards, events) {
       cards.forEach(function(card){
         card.bags.forEach(function (bag) {
@@ -374,6 +375,17 @@ mod.service(
         else {
           card.latestTrans = undefined;
         }
+
+        // Find bag of the latest transaction
+        if (card.latestTrans) {
+          var latestBag = _.find(card.bags, function(bag) {
+            return bag.srvID === card.latestTrans.bag.srvID;
+          });
+          if (latestBag) {
+            latestBag.isLatestTrans = true;
+          }
+        }
+
       });
     }
 
