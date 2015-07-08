@@ -102,11 +102,11 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
         }
       },
       series: [{
-        name: 'Успешных',
+        name: 'Успешные',
         data: successSeries,
         color: '#90EE90'
       }, {
-        name: 'Ошибки',
+        name: 'Неуспешные',
         data: errorSeries,
         color: '#F08080'
       }]
