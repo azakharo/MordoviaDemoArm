@@ -132,7 +132,8 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
         data: data
       }],
       legend: {
-        labelFormat: '<b>{name}</b>: {percentage:.1f} %'
+        //labelFormat: '<b>{name}</b>: {percentage:.1f} %'
+        labelFormat: '<b>{name}</b>: {y:.0f}'
       }
     });
   }
@@ -235,7 +236,8 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
         data: data
       }],
       legend: {
-        labelFormat: '<b>{name}</b>: {percentage:.1f} %'
+        //labelFormat: '<b>{name}</b>: {percentage:.1f} %'
+        labelFormat: '<b>{name}</b>: {y:.0f}'
       }
     });
   }

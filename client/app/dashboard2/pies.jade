@@ -4,7 +4,7 @@
     //pre {{ timePeriod || 'undefined'}}
     .btn-group
       label.btn.btn-primary(ng-model='timePeriod', btn-radio="'day'", ng-change="onTimePeriodChanged()") День
-      label.btn.btn-primary(ng-model='timePeriod', btn-radio="'week'", ng-change="onTimePeriodChanged()") Неделя
+      //label.btn.btn-primary(ng-model='timePeriod', btn-radio="'week'", ng-change="onTimePeriodChanged()") Неделя
       label.btn.btn-primary(ng-model='timePeriod', btn-radio="'month'", ng-change="onTimePeriodChanged()") Месяц
       label.btn.btn-primary(ng-model='timePeriod', btn-radio="'year'", ng-change="onTimePeriodChanged()") Год
 #pies-no-data-msg(ng-show="noData") НЕТ ДАННЫХ
