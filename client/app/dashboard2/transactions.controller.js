@@ -128,8 +128,14 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
     return 'ww' + event.timestamp.format('WW');
   }
 
+  moment.locale('en', {
+    months : [
+      "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль",
+      "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+    ]
+  });
   function groupEventsByMonth(event) {
-    return event.timestamp.format('MM.YYYY');
+    return event.timestamp.format('MMMM YYYY');
   }
 
   function groupEventsByYear(event) {
