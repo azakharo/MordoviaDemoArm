@@ -11,6 +11,7 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
       $scope.aggrPeriod = found;
     }
   }
+  $scope.noData = false;
 
   buildChart($scope.aggrPeriod);
 
@@ -175,6 +176,7 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
 
       // Limit data, if necessary
       events = limitEvents(events, aggrPeriod);
+      $scope.noData = events.length === 0;
 
       // Originally events are sorted by timestamp desc.
       // Reverse

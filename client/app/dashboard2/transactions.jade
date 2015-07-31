@@ -6,4 +6,5 @@
       //label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'week'", ng-change="onAggrPeriodChanged()") Неделя
       label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'month'", ng-change="onAggrPeriodChanged()") Месяц
       label.btn.btn-primary(ng-model='aggrPeriod', btn-radio="'year'", ng-change="onAggrPeriodChanged()") Год
-#trans-chart
+#trans-chart(ng-hide="noData")
+#trans-no-data-msg(ng-show="noData") НЕТ ДАННЫХ
