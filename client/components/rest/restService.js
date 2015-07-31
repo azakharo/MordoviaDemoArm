@@ -235,6 +235,17 @@ mod.service(
       return deffered.promise;
     }
 
+    function findCardBySrvID(cards, srvID) {
+      var card2ret = undefined;
+      _(cards).forEach(function(card) {
+        if (card.srvID === srvID) {
+          card2ret = card;
+          return false;
+        }
+      });
+      return card2ret;
+    }
+
     function findCardByBagID(cards, srvBagID) {
       var card2ret = undefined;
       _(cards).forEach(function(card) {
@@ -261,6 +272,17 @@ mod.service(
           }
         });
         if (bag2ret) {
+          return false;
+        }
+      });
+      return bag2ret;
+    }
+
+    function findCardBag(card, srvBagID) {
+      var bag2ret = undefined;
+      _(card.bags).forEach(function(bag) {
+        if (bag.srvID === srvBagID) {
+          bag2ret = bag;
           return false;
         }
       });
@@ -571,7 +593,9 @@ mod.service(
       // methods which return app specific models (not server models)
       getCurrencies:    getCurrencies,
       getCards:         getCards,
+      findCardBySrvID:  findCardBySrvID,
       findCardByBagID:  findCardByBagID,
+      findCardBag:      findCardBag,
       findBag:          findBag,
       getEvents:        getEvents,
       calcBalance:      calcBalance,

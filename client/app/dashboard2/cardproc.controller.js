@@ -24,7 +24,10 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
 
         // Sort cards by latest trans time desc
         newCards = _.sortBy(newCards, function(card) {
-          return (card.latestTrans) ? -card.latestTrans.timestamp : 0;
+          return -card.id;
+        });
+        newCards = _.sortBy(newCards, function(card) {
+          return (card.latestTrans) ? -card.latestTrans.timestamp : -moment.unix(0);
         });
 
         // Update the scope
@@ -53,7 +56,10 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
 
           // Sort cards by latest trans time desc
           cards = _.sortBy(cards, function(card) {
-            return (card.latestTrans) ? -card.latestTrans.timestamp : 0;
+            return -card.id;
+          });
+          cards = _.sortBy(cards, function(card) {
+            return (card.latestTrans) ? -card.latestTrans.timestamp : -moment.unix(0);
           });
 
           // Find the bags which have been changed, and animate the change
@@ -61,15 +67,21 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
           if ($scope.cards.length > 0) {
             // TODO Assumed that only bag balances are changed
             for (var cardInd = 0; cardInd < cardsCopy.length; cardInd++) {
-              var oldCard = $scope.cards[cardInd];
               var newCard = cardsCopy[cardInd];
+              var oldCard = myRest.findCardBySrvID($scope.cards, newCard.srvID);
+              if (!oldCard) {
+                continue;
+              }
               // Nothing changed in the card, skip
               if (angular.equals(oldCard, newCard)) {
                 continue;
               }
               for (var bagInd = 0; bagInd < oldCard.bags.length; bagInd++) {
                 var oldBag = oldCard.bags[bagInd];
-                var newBag = newCard.bags[bagInd];
+                var newBag = myRest.findCardBag(newCard, oldBag.srvID);
+                if (!newBag) {
+                  continue;
+                }
                 if (oldBag.balance !== newBag.balance) {
                   //log("card '" + oldCard.id + "', bag '" + oldBag.name + "': balance changed from " + oldBag.balance + " to " + newBag.balance);
                   //log(format("card '{}', bag '{}': balance changed from {} to {}!", oldCard.id, oldBag.name, oldBag.balance, newBag.balance));
