@@ -70,16 +70,14 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
               for (var bagInd = 0; bagInd < oldCard.bags.length; bagInd++) {
                 var oldBag = oldCard.bags[bagInd];
                 var newBag = newCard.bags[bagInd];
-                if (oldBag && newBag) {
-                  if (oldBag.balance !== newBag.balance) {
-                    //log("card '" + oldCard.id + "', bag '" + oldBag.name + "': balance changed from " + oldBag.balance + " to " + newBag.balance);
-                    //log(format("card '{}', bag '{}': balance changed from {} to {}!", oldCard.id, oldBag.name, oldBag.balance, newBag.balance));
-                    newBag.wasUpdated = true;
-                    newCard.justChanged = true;
-                  }
-                  else {
-                    newBag.wasUpdated = false;
-                  }
+                if (oldBag.balance !== newBag.balance) {
+                  //log("card '" + oldCard.id + "', bag '" + oldBag.name + "': balance changed from " + oldBag.balance + " to " + newBag.balance);
+                  //log(format("card '{}', bag '{}': balance changed from {} to {}!", oldCard.id, oldBag.name, oldBag.balance, newBag.balance));
+                  newBag.wasUpdated = true;
+                  newCard.justChanged = true;
+                }
+                else {
+                  newBag.wasUpdated = false;
                 }
               }
             }
