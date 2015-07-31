@@ -213,10 +213,17 @@ mod.controller('TransactionsCtrl', function ($scope, $interval, $timeout, $log, 
 
       groups = limitGroups(groups);
 
-      // Draw chart
-      drawChart(groups);
-
-      $timeout(resizeChart, 100);
+      if (events.length === 0) {
+        // drop the charts
+        if ($('#trans-chart').highcharts()) {
+          $('#trans-chart').highcharts().destroy();
+        }
+      }
+      else {
+        // Draw chart
+        drawChart(groups);
+        $timeout(resizeChart, 100);
+      }
     });
   }
 

@@ -293,18 +293,23 @@ mod.controller('PiesCtrl', function ($scope, $interval, $log, myRest, $timeout) 
         //log(grpName + " " + group.transactions);
       });
 
-      // Draw privileges pie
-      drawPrivilegesChart(privGroups);
-
-      // Draw card types pie
-      drawCardsChart(cardTypeGroups);
-
-      $timeout(resizeCharts, 100);
-
       if (events.length === 0) {
         // drop the charts
-        $('#privileges-chart').highcharts().destroy();
-        $('#cards-chart').highcharts().destroy();
+        if ($('#privileges-chart').highcharts()) {
+          $('#privileges-chart').highcharts().destroy();
+        }
+        if ($('#cards-chart').highcharts()) {
+          $('#cards-chart').highcharts().destroy();
+        }
+      }
+      else {
+        // Draw privileges pie
+        drawPrivilegesChart(privGroups);
+
+        // Draw card types pie
+        drawCardsChart(cardTypeGroups);
+
+        $timeout(resizeCharts, 100);
       }
     });
   }
