@@ -6,6 +6,9 @@ mod.service(
   "myRest",
   function ($http, $q, $log, $rootScope, $interval, $window) {
     var baseURL = 'http://cp.sarov-itc.ru/api/cp/v1/';
+    function getBaseURL() {
+      return baseURL;
+    }
 
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:admin');
     $http.defaults.headers.common['Content-type'] = 'application/json';
@@ -578,7 +581,9 @@ mod.service(
       // methods necessary only for the testing, debugging
       postTurnover:     postTurnover,
       replenishBalance: replenishBalance,
-      makePayment:      makePayment
+      makePayment:      makePayment,
+      // just helper
+      getBaseURL: getBaseURL
     });
   }
 );
