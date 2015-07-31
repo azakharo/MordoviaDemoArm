@@ -5,7 +5,7 @@ var mod = angular.module('restService', []);
 mod.service(
   "myRest",
   function ($http, $q, $log, $rootScope, $interval, $window) {
-    var baseURL = 'http://cp-prod.corp.sarov-itc.ru/';
+    var baseURL = 'http://cp.sarov-itc.ru/api/cp/v1/';
 
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:admin');
     $http.defaults.headers.common['Content-type'] = 'application/json';
@@ -70,7 +70,7 @@ mod.service(
           var accInd = 0;
           srvAccounts.forEach(function (srvAcc) {
             // Request transactions for the account
-            getAccountTransactions(srvAcc.Id).then(
+            getAccountTransactions(srvAcc.id).then(
               function (srvTransactions) {
                 transactions = transactions.concat(srvTransactions);
 
@@ -78,7 +78,7 @@ mod.service(
                 if (accInd === srvAccounts.length - 1) {
                   // sort by timestamp desc
                   transactions = _.sortBy(transactions, function (trans) {
-                    return -trans.Timestamp;
+                    return -trans.timestamp;
                   });
 
                   //log('resolve');
@@ -100,23 +100,23 @@ mod.service(
     function getOrgs() {
       var request = $http({
         method: "get",
-        url: baseURL + 'organizations'
+        url: baseURL + 'providers'
       });
       return ( request.then(handleSuccess, handleError) );
     }
 
-    function getOrgVehicles(orgID) {
+    function getVehicles() {
       var request = $http({
         method: "get",
-        url: baseURL + format('organizations/{}/vehicles', orgID)
+        url: baseURL + 'vehicles'
       });
       return ( request.then(handleSuccess, handleError) );
     }
 
-    function getOrgVehicleTurnover(orgID, vehicleID) {
+    function getVehicleTurnover(vehicleID) {
       var request = $http({
         method: "get",
-        url: baseURL + format('organizations/{}/vehicles/{}/turnovers', orgID, vehicleID)
+        url: baseURL + format('vehicles/{}/turnovers', vehicleID)
       });
       return ( request.then(handleSuccess, handleError) );
     }
@@ -133,15 +133,15 @@ mod.service(
           if (srvApps.length === 0) {
             deffered.resolve(currencies);
           }
-          var appID = srvApps[0].Id;
+          var appID = srvApps[0].id;
           getAppCurrencies(appID).then(
             function(srvCurrencies) {
               srvCurrencies.forEach(function (srvCurr) {
                 var curr = {};
-                curr.srvID = srvCurr.Id;
-                curr.code = srvCurr.Code;
-                curr.name = srvCurr.Info.Title;
-                curr.privilege = (srvCurr.Exemption) ? srvCurr.Exemption : 'unprivileged';
+                curr.srvID = srvCurr.id;
+                curr.code = srvCurr.symbol;
+                curr.name = srvCurr.description;
+                curr.privilege = (srvCurr.exemptionOUId !== null) ? "есть льгота" : 'unprivileged';
                 currencies.push(curr);
               });
 
@@ -170,41 +170,41 @@ mod.service(
           var accInd = 0;
           srvAccounts.forEach(function (srvAcc) {
             var card = {};
-            card.id = +srvAcc.Number;
-            card.srvAccountID = srvAcc.Id;
+            card.id = +srvAcc.number;
+            card.srvAccountID = srvAcc.id;
             // TODO use real card state here
             card.state = "success";
 
-            card.isESEK = srvAcc.UserId !== undefined && srvAcc.UserId !== null;
+            card.isESEK = srvAcc.userId !== undefined && srvAcc.userId !== null;
 
             // Request bags for the account
             card.bags = [];
-            getAccountMedias(srvAcc.Id).then(
+            getAccountMedias(srvAcc.id).then(
               function(medias) {
                 if (medias && medias.length > 0) {
                   // Get 1st media
                   // Get card RFID
                   var media = medias[0];
-                  card.RFID = media.RFID;
+                  card.RFID = media.rfid;
                   // Find card activation time
-                  var stateActivated = _(media.States).find(function(state) {
-                    return state.State === "Activated";
+                  var stateActivated = _(media.states).find(function(state) {
+                    return state.state === "activated";
                   });
                   if (stateActivated) {
-                    card.activatedAt = moment.unix(stateActivated.Timestamp);
+                    card.activatedAt = moment.unix(stateActivated.timestamp);
                   }
                 } // if media found
-                getAccountBags(srvAcc.Id).then(
+                getAccountBags(srvAcc.id).then(
                   function (srvBags) {
                     srvBags.forEach(function (srvBag) {
                       var bag = {};
-                      bag.srvID = srvBag.Id;
-                      bag.activePeriodStart = moment.unix(srvBag.TimeFrame.StartTimestamp);
-                      bag.activePeriodFinish = moment.unix(srvBag.TimeFrame.FinishTimestamp);
+                      bag.srvID = srvBag.id;
+                      bag.activePeriodStart = moment.unix(srvBag.timeframe.startTimestamp);
+                      bag.activePeriodFinish = moment.unix(srvBag.timeframe.finishTimestamp);
 
                       // Get currency by its server id
                       bag.currency = _.find(currencies, function (curr) {
-                        return curr.srvID === srvBag.CurrencyId;
+                        return curr.srvID === srvBag.currencyId;
                       });
 
                       //log('bag');
@@ -278,19 +278,19 @@ mod.service(
                   srvTransactions.forEach(function (srvTrans) {
                     var event = {};
                     event.id = eventInd + 1;
-                    event.srvTransactionID = srvTrans.Id;
-                    event.timestamp = moment.unix(srvTrans.Timestamp);
-                    event.card = findCardByBagID(cards, srvTrans.BagId);
-                    event.bag = findBag(cards, srvTrans.BagId);
-                    event.operation = srvTrans.Type;
+                    event.srvTransactionID = srvTrans.id;
+                    event.timestamp = moment.unix(srvTrans.timestamp);
+                    event.card = findCardByBagID(cards, srvTrans.bagId);
+                    event.bag = findBag(cards, srvTrans.bagId);
+                    event.operation = srvTrans.type;
 
-                    var bag = findBag(cards, srvTrans.BagId);
+                    var bag = findBag(cards, srvTrans.bagId);
                     if (bag) {
                       event.currency = bag.currency;
                     }
 
-                    event.value = srvTrans.Value;
-                    event.isSuccess = srvTrans.States[0].State === "Accepted";
+                    event.value = srvTrans.value;
+                    event.isSuccess = srvTrans.status === "valid";
 
                     events.push(event);
                     eventInd += 1;
@@ -394,34 +394,22 @@ mod.service(
       var turnover = undefined;
       var deffered = $q.defer();
 
-      getOrgs().then(
-        function(orgs) {
-          if (orgs.length === 0) {
+      getVehicles().then(
+        function(vehicles) {
+          if (vehicles.length === 0) {
             deffered.resolve(turnover);
             return;
           }
-          var org = orgs[0];
-          getOrgVehicles(org.Id).then(
-            function(vehicles) {
-              if (vehicles.length === 0) {
+          var vehicle = vehicles[0];
+          getVehicleTurnover(vehicle.id).then(
+            function(srvTurnovers) {
+              if (srvTurnovers.length === 0) {
                 deffered.resolve(turnover);
                 return;
               }
-              var vehicle = vehicles[0];
-              getOrgVehicleTurnover(org.Id, vehicle.Id).then(
-                function(srvTurnovers) {
-                  if (srvTurnovers.length === 0) {
-                    deffered.resolve(turnover);
-                    return;
-                  }
-                  // Get last and return quantity
-                  var lastSrvTurnover = srvTurnovers[srvTurnovers.length - 1];
-                  deffered.resolve(lastSrvTurnover.Quantity);
-                },
-                function(reason) {
-                  deffered.reject(reason);
-                }
-              );
+              // Get last and return quantity
+              var lastSrvTurnover = srvTurnovers[srvTurnovers.length - 1];
+              deffered.resolve(lastSrvTurnover.quantity);
             },
             function(reason) {
               deffered.reject(reason);
@@ -441,37 +429,26 @@ mod.service(
       var hist = [];
       var deffered = $q.defer();
 
-      getOrgs().then(
-        function(orgs) {
-          if (orgs.length === 0) {
+      getVehicles().then(
+        function(vehicles) {
+          if (vehicles.length === 0) {
             deffered.resolve(hist);
           }
-          var org = orgs[0];
-          getOrgVehicles(org.Id).then(
-            function(vehicles) {
-              if (vehicles.length === 0) {
+          var vehicle = vehicles[0];
+          getVehicleTurnover(vehicle.id).then(
+            function(srvTurnovers) {
+              if (srvTurnovers.length === 0) {
                 deffered.resolve(hist);
               }
-              var vehicle = vehicles[0];
-              getOrgVehicleTurnover(org.Id, vehicle.Id).then(
-                function(srvTurnovers) {
-                  if (srvTurnovers.length === 0) {
-                    deffered.resolve(hist);
-                  }
 
-                  // Get last and return quantity
-                  _(srvTurnovers).forEach(function(to) {
-                    var turno = {};
-                    turno.timestamp = moment.unix(to.Timestamp);
-                    turno.value = to.Quantity;
-                    hist.push(turno);
-                  });
-                  deffered.resolve(hist);
-                },
-                function(reason) {
-                  deffered.reject(reason);
-                }
-              );
+              // Get last and return quantity
+              _(srvTurnovers).forEach(function(to) {
+                var turno = {};
+                turno.timestamp = moment.unix(to.timestamp);
+                turno.value = to.quantity;
+                hist.push(turno);
+              });
+              deffered.resolve(hist);
             },
             function(reason) {
               deffered.reject(reason);

@@ -24,7 +24,7 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
 
         // Sort cards by latest trans time desc
         newCards = _.sortBy(newCards, function(card) {
-          return -card.latestTrans.timestamp;
+          return (card.latestTrans) ? -card.latestTrans.timestamp : 0;
         });
 
         // Update the scope
@@ -53,7 +53,7 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
 
           // Sort cards by latest trans time desc
           cards = _.sortBy(cards, function(card) {
-            return -card.latestTrans.timestamp;
+            return (card.latestTrans) ? -card.latestTrans.timestamp : 0;
           });
 
           // Find the bags which have been changed, and animate the change
@@ -70,14 +70,16 @@ mod.controller('CardProcCtrl', function ($scope, $interval, $log, $q, myRest) {
               for (var bagInd = 0; bagInd < oldCard.bags.length; bagInd++) {
                 var oldBag = oldCard.bags[bagInd];
                 var newBag = newCard.bags[bagInd];
-                if (oldBag.balance !== newBag.balance) {
-                  //log("card '" + oldCard.id + "', bag '" + oldBag.name + "': balance changed from " + oldBag.balance + " to " + newBag.balance);
-                  //log(format("card '{}', bag '{}': balance changed from {} to {}!", oldCard.id, oldBag.name, oldBag.balance, newBag.balance));
-                  newBag.wasUpdated = true;
-                  newCard.justChanged = true;
-                }
-                else {
-                  newBag.wasUpdated = false;
+                if (oldBag && newBag) {
+                  if (oldBag.balance !== newBag.balance) {
+                    //log("card '" + oldCard.id + "', bag '" + oldBag.name + "': balance changed from " + oldBag.balance + " to " + newBag.balance);
+                    //log(format("card '{}', bag '{}': balance changed from {} to {}!", oldCard.id, oldBag.name, oldBag.balance, newBag.balance));
+                    newBag.wasUpdated = true;
+                    newCard.justChanged = true;
+                  }
+                  else {
+                    newBag.wasUpdated = false;
+                  }
                 }
               }
             }
