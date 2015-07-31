@@ -494,7 +494,7 @@ mod.service(
     // PRIVATE METHODS
 
     function handleError(response) {
-      if (response.status == 503 || response.status == 0) {
+      if (response.status == 502 || response.status == 503 || response.status == 0) {
         $rootScope.isRestUnavailable = true;
       }
       else {

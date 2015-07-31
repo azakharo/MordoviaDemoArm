@@ -5,7 +5,7 @@
         img(width="238" height="32" alt="Лого" src="assets/images/logo.png")
     #header-text Система обработки электронных карт
     #header-right-part Placeholder
-  #content
+  #content(ng-hide='isRestUnavailable')
     #left-part(ui-view="cardproc")
     #right-part
       #my-right-up.right-up(ui-view="pies")
