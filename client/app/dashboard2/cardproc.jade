@@ -10,12 +10,13 @@
           .card-activation-time: small активирована {{ card.activatedAt.toDate() | date:'yyyy-MM-dd HH:mm:ss' }}
         .panel-body
           table.table.table-bordered.table-hover.table-condensed.no-border(style="background: white; margin-bottom: 0px")
-            tbody
+            thead
               tr
                 th.w25.no-border(style="padding-left: 30px;") Способ оплаты
                 th.w25.no-border.text-right Баланс
                 th.w25.no-border.text-right Период действия
                 th.w25.no-border.text-right Кол-во операций
+            tbody
               tr(ng-repeat='bag in card.bags', ng-class="{ 'latest-bag': bag.isLatestTrans }")
                 td.w25.no-border(style="padding-left: 30px;") {{ bag.currency.name }}
                 td.w25.no-border.text-right
