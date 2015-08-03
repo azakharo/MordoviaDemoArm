@@ -24,7 +24,7 @@
                   style="padding: 5px 10px") {{ bag.balance }}
                 td.w25.no-border.text-right {{ bag | bagActivePeriodFilter }}
                 td.w25.no-border.text-right {{ bag.transCount }}
-        .card-panel-footer.panel-footer
+        .card-panel-footer.panel-footer(ng-show="card.latestTrans")
           .trans-status
             span.fa.fa-check-circle(style="color: green", ng-if="card.latestTrans.isSuccess")
             span.fa.fa-minus-circle(style="color: red", ng-if="!card.latestTrans.isSuccess")
