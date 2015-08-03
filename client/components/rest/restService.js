@@ -539,11 +539,14 @@ mod.service(
     function postTurnover(timestamp, value) {
       var request = $http({
         method: "post",
-        url: baseURL + 'organizations/55643625c98e560001000001/vehicles/5566ee65ffa2621d995c1e1a/turnovers',
+        url: baseURL + 'vehicles/1/turnovers',
         data: [{
-          "Timestamp": timestamp.unix(),
-          "Distance": 1000,
-          "Quantity": value
+          "timeframe": {
+            "startTimestamp": timestamp.unix() - 1000,
+            "finishTimestamp": timestamp.unix()
+          },
+          "distance": 1000,
+          "quantity": value
           }]
       });
       return ( request.then(handleSuccess, handleError) );
@@ -554,10 +557,10 @@ mod.service(
         method: "post",
         url: baseURL + 'replenishment',
         data: {
-          "CurrencyCode": "TR-BL",
-          "RFID": "1111-2222-3333-4444",
-          "Timestamp": timestamp.unix(),
-          "Value": value
+          "symbol":"TCK",
+          "rfid": "1111-2222-3333-4444",
+          "timestamp": timestamp.unix(),
+          "value": value
         }
       });
       return ( request.then(handleSuccess, handleError) );
@@ -568,11 +571,11 @@ mod.service(
         method: "post",
         url: baseURL + 'payment',
         data: {
-          "RFID": "1111-2222-3333-4444",
-          "Timestamp": timestamp.unix(),
-          "ServiceId": "556436c457ab120001000001",
-          "ApplicationId": "55643649dade7e0001000001",
-          "OrganizationId": "55643625c98e560001000001"
+          "rfid": "1111-2222-3333-4444",
+          "timestamp": timestamp.unix(),
+          "serviceId": 3,
+          "applicationId": 3,
+          "providerId": 4
         }
       });
       return ( request.then(handleSuccess, handleError) );
